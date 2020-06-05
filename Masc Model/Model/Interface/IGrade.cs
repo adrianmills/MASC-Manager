@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Masc_Model.Model.Interface
+{
+   public interface IGrade
+    {
+ string Name { get; set; }
+
+ long SyllabusID { get; set; }
+ICollection<GradingHistory> GradingHistories { get; set; }
+    }
+}

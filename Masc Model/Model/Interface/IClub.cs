@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Masc_Model.Model.Interface
+{
+    public interface IClub
+    {
+        string Name { get; set; }
+        ICollection<Student> Students { get; set; }
+    }
+}
