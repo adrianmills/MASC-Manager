@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Masc_Model.Model
@@ -9,6 +10,7 @@ namespace Masc_Model.Model
     public abstract class BaseModel : IBase
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long ID {get;set;}
         [Required]
         public DateTime DateCreated {get;set;}

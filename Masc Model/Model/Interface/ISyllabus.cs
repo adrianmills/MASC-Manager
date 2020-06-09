@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
-   public interface ISyllabus
+   public interface ISyllabus: IBase
     {
 
         string Name { get; set; }

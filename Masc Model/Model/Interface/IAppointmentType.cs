@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
- public    interface IAppointmentType
+ public    interface IAppointmentType : IBase
     {
         string Name { get; set; }
     }

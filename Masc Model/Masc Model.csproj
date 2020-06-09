@@ -5,4 +5,18 @@
     <RootNamespace>Masc_Model</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Model\AppointmentType.cs" />
+    <Compile Remove="Model\Attendence.cs" />
+    <Compile Remove="Model\Award.cs" />
+    <Compile Remove="Model\Interface\IAppointmentType.cs" />
+    <Compile Remove="Model\Interface\IAward.cs" />
+    <Compile Remove="Model\Interface\IStudentAward.cs" />
+    <Compile Remove="Model\StudentAward.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
+  </ItemGroup>
+
 </Project>

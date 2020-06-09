@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Masc_Model.Model
 {
-    class Grade : BaseModel, IGrade
+ public   class Grade : BaseModel, IGrade
     {
         public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public long SyllabusID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

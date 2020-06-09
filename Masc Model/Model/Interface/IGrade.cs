@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
-   public interface IGrade
+   public interface IGrade : IBase
     {
  string Name { get; set; }
 

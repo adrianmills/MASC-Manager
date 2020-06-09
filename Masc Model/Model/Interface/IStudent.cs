@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
-    public interface IStudent
+    public interface IStudent : IBase
     {
+        [ForeignKey("AddressID")]
         Address Address { get; set; }
         long AddressId { get; set; }
         bool Adult { get; }
@@ -26,7 +28,7 @@ namespace Masc_Model.Model.Interface
         string ParentGuardian { get; set; }
         string ReferralSource { get; set; }
         DateTime? Started { get; set; }
-        ICollection<StudentAward> StudentAwards { get; set; }
+        //ICollection<StudentAward> StudentAwards { get; set; }
         string Surname { get; set; }
         Syllabus Syllabus { get; set; }
         long SyllabusID { get; set; }

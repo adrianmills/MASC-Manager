@@ -31,11 +31,10 @@ namespace Masc_Model.Model
         public string ParentGuardian {get;set; }
         public string ReferralSource {get;set; }
         public DateTime? Started {get;set; }
-        public ICollection<StudentAward> StudentAwards {get;set; }
+        //public ICollection<StudentAward> StudentAwards {get;set; }
         public string Surname {get;set; }
         public Syllabus Syllabus {get;set; }
         public long SyllabusID {get;set; }
         public DateTime? UpdateDoneOn {get;set; }
-        public ICollection<UserStudent> Users {get;set; }
     }
 }

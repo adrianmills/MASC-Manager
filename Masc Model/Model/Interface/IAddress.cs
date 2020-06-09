@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
-   public interface IAddress
+   public interface IAddress : IBase
     {
          string AddressLine1 { get; set; }
          string AddressLine2 { get; set; }
@@ -15,7 +15,7 @@ namespace Masc_Model.Model.Interface
          string OtherPhoneNumber { get; set; }
          string EmailAddress { get; set; }
 
-         virtual ICollection<Student> Students { get; set; }
+         ICollection<Student> Students { get; set; }
     }
-}
+
 }

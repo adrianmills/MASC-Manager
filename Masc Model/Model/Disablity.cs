@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Masc_Model.Model
 {
-    class Disablity : BaseModel, IDisablity
+   public class Disablity : BaseModel, IDisablity
     {
         public string Name { get; set; }
 
-        public ICollection<StudentDisability>
+        public ICollection<StudentDisability> Students { get; set; }
     }
 }

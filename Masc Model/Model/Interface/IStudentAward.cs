@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
-  public  interface IStudentAward
+  public  interface IStudentAward : IBase
     {
 
         long AwardID { get; set; }

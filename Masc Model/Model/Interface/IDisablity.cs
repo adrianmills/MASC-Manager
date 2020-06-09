@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
-   public interface IDisablity
+   public interface IDisablity : IBase
     {
         string Name { get; set; }
 
-        virtual ICollection<StudentDisability> Students { get; set; }
+         ICollection<StudentDisability> Students { get; set; }
     }
 }

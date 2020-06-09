@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
- public   interface IGradingHistory
+ public   interface IGradingHistory : IBase
     {
        long StudentID { get; set; }
 
@@ -15,7 +15,6 @@ namespace Masc_Model.Model.Interface
  Student Student { get; set; }
 Grade Grade { get; set; }
 
-List<Grade> Grades { get; set; }
- List<Student> Students { get; set; }
+
     }
 }

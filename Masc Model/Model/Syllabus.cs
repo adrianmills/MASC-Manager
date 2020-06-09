@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Masc_Model.Model
 {
-    public class Club : BaseModel, IClub
+    public class Syllabus : BaseModel, ISyllabus
     {
-        public string Name { get;set;}
-        public ICollection<Student> Students { get;set;}
+        public string Name { get;set; }
+        public ICollection<Student> Students { get;set; }
     }
 }

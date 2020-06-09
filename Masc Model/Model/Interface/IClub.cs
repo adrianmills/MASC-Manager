@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
-    public interface IClub
+    public interface IClub : IBase
     {
         string Name { get; set; }
         ICollection<Student> Students { get; set; }

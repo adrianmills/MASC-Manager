@@ -14,5 +14,6 @@ namespace Masc_Model.Model
         public string HomePhoneNumber { get;set; }
         public string OtherPhoneNumber { get;set; }
         public string EmailAddress { get;set; }
+        public ICollection<Student> Students { get; set; }
     }
 }

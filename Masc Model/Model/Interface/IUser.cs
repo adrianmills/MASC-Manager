@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
-  public   interface IUser
+  public   interface IUser:IBase
     {
  string UserName { get; set; }
 

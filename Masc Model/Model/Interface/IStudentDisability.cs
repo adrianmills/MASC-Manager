@@ -4,12 +4,19 @@ using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
- public    interface IAttendance : IBase
+    public interface IStudentDisability : IBase
     {
+
         long StudentID { get; set; }
 
-        DateTime Date { get; set; }
+        long DisabilityID { get; set; }
 
         Student Student { get; set; }
+
+        Disablity Disablity { get; set; }
+
+
+
+
     }
 }
