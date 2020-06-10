@@ -7,18 +7,18 @@ using System.Text;
 
 namespace Business_Logic.DataRetrival.Interface
 {
-   public interface IDataOperation<T>  where T:IBase
+   public interface IDataOperationFindAndDelete<T>  where T:IBase
     {
 
-        bool Add(T record);
-
-        bool Update(T record);
+       
 
         T Find(int id, bool isEdit);
 
         T Find(Expression<Func<T, bool>> filter, bool isEdit);
 
         void Delete(int id);
+
+        void Delete(T record);
 
     }
 }

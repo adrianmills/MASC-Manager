@@ -5,11 +5,10 @@ using System.Text;
 
 namespace Business_Logic.DataRetrival.Interface
 {
-    public interface IClubData:IDataOperationFindAndDelete<IClub>
+    public interface IDataOperationAddAndUpdate<T> where T : IBase
     {
+        bool Add(T record);
 
-        IEnumerable<IClub> Clubs { get; set; }
-        void ProccessClubs(IEnumerable<IClub> clubs);
-
+        bool Update(T record);
     }
 }

@@ -18,5 +18,12 @@ namespace Masc_Model.Model
         public string ModifiedBy {get;set;}
         public DateTime? ModifiedOn {get;set;}
         public bool Deleted {get;set;}
+
+
+        [NotMapped]
+        public bool New { get; set; }
+
+        [NotMapped]
+        public bool Updated { get; set; }
     }
 }

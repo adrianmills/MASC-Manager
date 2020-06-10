@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Masc_Model.Model.Interface
 {
-    public interface IClub : IBase
+   public interface IDirty
     {
-        string Name { get; set; }
-        ICollection<Student> Students { get; set; }
 
+        bool New { get; set; }
 
+        bool Changed { get; set; }
     }
 }

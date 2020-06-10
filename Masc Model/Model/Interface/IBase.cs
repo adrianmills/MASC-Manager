@@ -19,5 +19,8 @@ namespace Masc_Model.Model.Interface
          DateTime? ModifiedOn { get; set; }
 
          bool Deleted { get; set; }
+
+       bool Updated { get; set; }
+        bool New { get; set; }
     }
 }

@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DataRetrival\Interface\uhbo1nwx.gdp~" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Masc Model\Masc Model.csproj" />
   </ItemGroup>
 
