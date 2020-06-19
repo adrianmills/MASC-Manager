@@ -6,12 +6,18 @@ using System.Text;
 
 namespace Masc_Model.DAL
 {
-    public class MASCContext:DbContext
+    public class MASCContext : DbContext
     {
         public MASCContext(DbContextOptions<MASCContext> options)
     : base(options)
         {
         }
+
+//        public MASCContext(DbContextOptions options)
+//: base(options)
+//        {
+//        }
+
 
         public DbSet<Club> Clubs { get; set; }
 

@@ -1,4 +1,6 @@
 ﻿using Business_Logic.DataRetrival.Interface;
+using Business_Logic.DTO;
+using Business_Logic.DTO.Interface;
 using Masc_Model.DAL;
 using Masc_Model.Model;
 using Masc_Model.Model.Interface;
@@ -21,7 +23,23 @@ namespace Business_Logic.DataRetrival
             _context = context;
         }
 
-        public IEnumerable<IClub> Clubs { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IEnumerable<IClubDTO  > Clubs 
+        { 
+            get
+            {
+                List<IClubDTO> clubs = new List<IClubDTO>();
+
+                clubs.AddRange(from c in _context.Clubs
+                               where !c.Deleted
+                               select new ClubDTO
+                               {
+                                   ID = c.ID,
+                                   ClubName = c.Name
+                               });
+
+                return clubs;
+            }
+        }
 
         void Add(IClub record)
         {
@@ -29,7 +47,7 @@ namespace Business_Logic.DataRetrival
             _context.Clubs.Add((Club)record);
         }
 
-        public void Delete(int id)
+        public void Delete(long id)
         {
             Delete(Find(id, true));
 
@@ -42,7 +60,7 @@ namespace Business_Logic.DataRetrival
             record.Deleted = true;
         }
 
-        public IClub Find(int id, bool isEdit)
+        public IClub Find(long id, bool isEdit)
         {
             return Find(c => c.ID == id, isEdit);
         }
@@ -70,26 +88,62 @@ namespace Business_Logic.DataRetrival
             return club;
         }
 
-        public void ProccessClubs(IEnumerable<IClub> clubs)
+        public bool ProccessClubs(IClubDataItems dataItems)
         {
-            foreach (IClub club in clubs.Where(c => c.Updated || c.New))
+            try
             {
-                if (club.New)
+                IClub club=null;
+                foreach (IClubDTO c in dataItems.Clubs)
                 {
-                    Add(club);
-                }
-                else
-                {
-                    Update(club);
-                }
-            }
+                    if (c.ID == 0)
+                    {
+                        club = new Club { Name = c.ClubName };
+                        AddDetails(club, true);
+                        Add(club);
+                    }
+                    else
+                    {
+                        club = Find(c.ID, true);
 
-            _context.SaveChanges();
+                        if (club.Name != c.ClubName)
+
+                        {
+                            club.Name = c.ClubName;
+                            AddDetails(club);
+                            _context.Clubs.Update((Club)club);
+                        }
+                    }
+                }
+
+                foreach(IClubDTO c in dataItems.DeletedClubs)
+                {
+                    Delete(c.ID);
+                }    
+                _context.SaveChanges();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         void Update(IClub record)
         {
             AddDetails(record, false);
         }
+    }
+
+    public class ClubDataItems : IClubDataItems
+    {
+
+        public ClubDataItems()
+        {
+            Clubs = new List<IClubDTO>();
+            DeletedClubs = new List<IClubDTO>();
+        }
+
+        public List<IClubDTO> Clubs { get; set; }
+        public List<IClubDTO> DeletedClubs { get; set; }
     }
 }

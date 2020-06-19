@@ -9,7 +9,7 @@ namespace Masc_Model.Model.Interface
 
          long ID { get; set; }
 
-         DateTime DateCreated { get; set; }
+         DateTime CreatedOn { get; set; }
 
          string CreatedBy { get; set; }
 
@@ -20,7 +20,5 @@ namespace Masc_Model.Model.Interface
 
          bool Deleted { get; set; }
 
-       bool Updated { get; set; }
-        bool New { get; set; }
     }
 }

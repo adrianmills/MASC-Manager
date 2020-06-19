@@ -15,13 +15,13 @@ namespace Business_Logic.DataRetrival
         {
             _user = user;
         }
-        public void AddDetails(IBase record, bool newRecord)
+        public void AddDetails(IBase record, bool newRecord= false)
         {
            
             if (newRecord)
             {
                 record.CreatedBy = _user.UserName;
-                record.DateCreated = DateTime.Now;
+                record.CreatedOn = DateTime.Now;
             }
             else
             {

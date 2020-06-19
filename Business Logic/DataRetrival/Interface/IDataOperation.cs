@@ -12,11 +12,11 @@ namespace Business_Logic.DataRetrival.Interface
 
        
 
-        T Find(int id, bool isEdit);
+        T Find(long id, bool isEdit);
 
         T Find(Expression<Func<T, bool>> filter, bool isEdit);
 
-        void Delete(int id);
+        void Delete(long id);
 
         void Delete(T record);
 

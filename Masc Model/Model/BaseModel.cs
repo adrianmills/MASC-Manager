@@ -13,17 +13,15 @@ namespace Masc_Model.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long ID {get;set;}
         [Required]
-        public DateTime DateCreated {get;set;}
+        public DateTime CreatedOn {get;set;}
+
+        [Required]
+        [StringLength(50)]
         public string CreatedBy {get;set;}
+        [StringLength(50)]
         public string ModifiedBy {get;set;}
         public DateTime? ModifiedOn {get;set;}
         public bool Deleted {get;set;}
 
-
-        [NotMapped]
-        public bool New { get; set; }
-
-        [NotMapped]
-        public bool Updated { get; set; }
     }
 }
