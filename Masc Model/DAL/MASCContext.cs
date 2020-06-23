@@ -6,32 +6,32 @@ using System.Text;
 
 namespace Masc_Model.DAL
 {
-    public class MASCContext : DbContext
+    public class MASCContext : DbContext, IMASCContext
     {
         public MASCContext(DbContextOptions<MASCContext> options)
     : base(options)
         {
         }
 
-//        public MASCContext(DbContextOptions options)
-//: base(options)
-//        {
-//        }
+        //        public MASCContext(DbContextOptions options)
+        //: base(options)
+        //        {
+        //        }
 
 
-        public DbSet<Club> Clubs { get; set; }
+        public virtual DbSet<Club> Clubs { get; set; }
 
-        public DbSet<Syllabus> Syllabi { get; set; }
+        public virtual DbSet<Syllabus> Syllabi { get; set; }
 
-        public DbSet<Disablity> Disablities { get; set; }
+        public virtual DbSet<Disablity> Disablities { get; set; }
 
-        public DbSet<Student> Students { get; set; }
+        public virtual DbSet<Student> Students { get; set; }
 
-        public DbSet<StudentDisability> StudentDisabilities { get; set; }
+        public virtual DbSet<StudentDisability> StudentDisabilities { get; set; }
 
-        public DbSet<Grade> Grades { get; set; }
+        public virtual DbSet<Grade> Grades { get; set; }
 
-        public DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<Address> Addresses { get; set; }
 
     }
 }

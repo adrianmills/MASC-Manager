@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Business_Logic.DataRetrival.Interface;
+using Business_Logic.DTO.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Business_Logic.Session;
+using Business_Logic.DTO;
+using Business_Logic.DataRetrival;
 
 namespace MASC_Web.Controllers
 {
@@ -20,77 +24,57 @@ namespace MASC_Web.Controllers
         // GET: ClubController
         public ActionResult Index()
         {
+            HttpContext.Session.Set("clubs", _clubData.Clubs);
+            HttpContext.Session.Set("deletedclubs" , new List<IClubDTO>());
 
-            return PartialView("_list",_clubData.Clubs);
+            return PartialView("_list");
         }
 
-        // GET: ClubController/Details/5
-        public ActionResult Details(long id)
+
+        public void AddClub(string clubname)
         {
-            return PartialView("_detail",_clubData.Find(id,false));
+            var clubs = HttpContext.Session.Get<List<IClubDTO>>("clubs");
+
+            var club = new ClubDTO { ClubName = clubname };
+
+            clubs.Add(club);
+
+            HttpContext.Session.Set("clubs",clubs);
+
         }
 
-        // GET: ClubController/Create
-        public ActionResult Create()
+        public void UpdateClub(long id, string clubname)
         {
-            return PartialView("_create");
+            var clubs = HttpContext.Session.Get<List<IClubDTO>>("clubs");
+
+            var club = clubs.Where(c => c.ID == id).FirstOrDefault();
+
+            club.ClubName = clubname;
+
+            HttpContext.Session.Set("clubs", clubs);
         }
 
-        // POST: ClubController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public void DeleteClub(long id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var clubs = HttpContext.Session.Get<List<IClubDTO>>("clubs");
+            var deletedclubs = HttpContext.Session.Get<List<IClubDTO>>("deletedclubs");
+
+            var club = clubs.Where(c => c.ID == id).FirstOrDefault();
+
+            clubs.Remove(club);
+            deletedclubs.Add(club);
+            HttpContext.Session.Set("clubs", clubs);
+            HttpContext.Session.Set("deletedclubs", deletedclubs);
         }
 
-        // GET: ClubController/Edit/5
-        public ActionResult Edit(int id)
+        public void SaveChanges()
         {
-            return View();
-        }
+            IClubDataItems dataItems = new ClubDataItems();
 
-        // POST: ClubController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            dataItems.Clubs = HttpContext.Session.Get<List<IClubDTO>>("clubs");
+            dataItems.DeletedClubs = HttpContext.Session.Get<List<IClubDTO>>("deletedclubs");
 
-        // GET: ClubController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ClubController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _clubData.ProccessClubs(dataItems);
         }
     }
 }

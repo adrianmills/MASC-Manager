@@ -97,8 +97,8 @@ namespace Business_Logic.DataRetrival
                 {
                     if (c.ID == 0)
                     {
-                        club = new Club { Name = c.ClubName };
-                        AddDetails(club, true);
+                        club = new Club { ID=0,Name = c.ClubName };
+                        //AddDetails(club, true);
                         Add(club);
                     }
                     else
@@ -109,7 +109,7 @@ namespace Business_Logic.DataRetrival
 
                         {
                             club.Name = c.ClubName;
-                            AddDetails(club);
+                            //AddDetails(club);
                             _context.Clubs.Update((Club)club);
                         }
                     }
@@ -146,4 +146,6 @@ namespace Business_Logic.DataRetrival
         public List<IClubDTO> Clubs { get; set; }
         public List<IClubDTO> DeletedClubs { get; set; }
     }
+
+
 }
