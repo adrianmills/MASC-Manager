@@ -139,12 +139,12 @@ namespace Business_Logic.DataRetrival
 
         public ClubDataItems()
         {
-            Clubs = new List<IClubDTO>();
-            DeletedClubs = new List<IClubDTO>();
+            Clubs = new List<ClubDTO>();
+            DeletedClubs = new List<ClubDTO>();
         }
 
-        public List<IClubDTO> Clubs { get; set; }
-        public List<IClubDTO> DeletedClubs { get; set; }
+        public List<ClubDTO> Clubs { get; set; }
+        public List<ClubDTO> DeletedClubs { get; set; }
     }
 
 

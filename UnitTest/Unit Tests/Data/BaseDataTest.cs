@@ -7,33 +7,32 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnitTest.Mock_Components;
 
-namespace UnitTest.Unit_Tests
+namespace UnitTest.Unit_Tests.Data
 {
-  public abstract  class TestBase
+    public abstract class BaseDataTest
     {
-       internal IUser user;
+        internal IUser user;
 
-        [SetUp]
-        public void Intilise()
+        internal MockData data = new MockData();
+        public BaseDataTest()
         {
             user = new User { ID = 1, UserName = "Unit Test", Deleted = false, CreatedBy = "am", CreatedOn = DateTime.Now };
         }
 
-        internal MASCContext Context
+        internal DbContextOptions<MASCContext> ContextOptions
         {
             get
             {
-                var options = new DbContextOptionsBuilder<MASCContext>()
+                return new DbContextOptionsBuilder<MASCContext>()
                     .UseInMemoryDatabase(databaseName: "MASCManager", new InMemoryDatabaseRoot())
                     .Options;
 
 
 
-                var context = new MASCContext(options);
+               
 
-
-                return context;
 
 
 

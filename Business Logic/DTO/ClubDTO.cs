@@ -7,6 +7,18 @@ namespace Business_Logic.DTO
 {
     public class ClubDTO : BaseDTO, IClubDTO
     {
+        public long ClubID
+        {
+            get
+            {
+                return ID;
+            }
+
+            set
+            {
+                ID = value;
+            }
+        }
         public string ClubName { get; set; }
     }
 }

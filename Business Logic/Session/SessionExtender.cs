@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Business_Logic.Session
 {
@@ -7,13 +9,17 @@ namespace Business_Logic.Session
     {
         public static void Set<T>(this ISession session, string key, T value)
         {
-            session.SetString(key, JsonSerializer.Serialize(value));
+            
+            var data = JsonSerializer.Serialize<T>(value);
+            session.SetString(key,data );
         }
 
         public static T Get<T>(this ISession session, string key)
         {
+            
             var value = session.GetString(key);
-            return value == null ? default : JsonSerializer.Deserialize<T>(value);
+            var data= JsonSerializer.Deserialize<T>(value);
+            return value == null ? default : data;
         }
     }
 }

@@ -4,9 +4,10 @@ using System.Text;
 
 namespace Business_Logic.DTO.Interface
 {
-    public interface IClubDTO:IBaseDTO
+   public interface ISyllabusDTO
     {
-        long ClubID { get; set; }
-        string ClubName { get; set; }
+        long SyallbusID { get; set; }
+
+        string SyllabusName { get; set; }
     }
 }

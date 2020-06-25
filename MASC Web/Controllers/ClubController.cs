@@ -21,19 +21,20 @@ namespace MASC_Web.Controllers
         {
             _clubData = clubData;
         }
+       
         // GET: ClubController
         public ActionResult Index()
         {
             HttpContext.Session.Set("clubs", _clubData.Clubs);
             HttpContext.Session.Set("deletedclubs" , new List<IClubDTO>());
-
-            return PartialView("_list");
+            var clubs = _clubData.Clubs;
+            return PartialView("_list",clubs);
         }
 
 
         public void AddClub(string clubname)
         {
-            var clubs = HttpContext.Session.Get<List<IClubDTO>>("clubs");
+            var clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
 
             var club = new ClubDTO { ClubName = clubname };
 
@@ -45,9 +46,9 @@ namespace MASC_Web.Controllers
 
         public void UpdateClub(long id, string clubname)
         {
-            var clubs = HttpContext.Session.Get<List<IClubDTO>>("clubs");
+            var clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
 
-            var club = clubs.Where(c => c.ID == id).FirstOrDefault();
+            var club = clubs.Where(c => c.ClubID == id).FirstOrDefault();
 
             club.ClubName = clubname;
 
@@ -56,8 +57,8 @@ namespace MASC_Web.Controllers
 
         public void DeleteClub(long id)
         {
-            var clubs = HttpContext.Session.Get<List<IClubDTO>>("clubs");
-            var deletedclubs = HttpContext.Session.Get<List<IClubDTO>>("deletedclubs");
+            var clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
+            var deletedclubs = HttpContext.Session.Get<List<ClubDTO>>("deletedclubs");
 
             var club = clubs.Where(c => c.ID == id).FirstOrDefault();
 
@@ -69,10 +70,10 @@ namespace MASC_Web.Controllers
 
         public void SaveChanges()
         {
-            IClubDataItems dataItems = new ClubDataItems();
+            var dataItems = new ClubDataItems();
 
-            dataItems.Clubs = HttpContext.Session.Get<List<IClubDTO>>("clubs");
-            dataItems.DeletedClubs = HttpContext.Session.Get<List<IClubDTO>>("deletedclubs");
+            dataItems.Clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
+            dataItems.DeletedClubs = HttpContext.Session.Get<List<ClubDTO>>("deletedclubs");
 
             _clubData.ProccessClubs(dataItems);
         }

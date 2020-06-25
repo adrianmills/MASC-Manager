@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Unit Tests\Data\reddundent ClubUnitTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EntityFrameworkCore.Testing.NSubstitute" Version="2.2.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.5" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
@@ -23,6 +28,10 @@
     <ProjectReference Include="..\Business Logic\Business Logic.csproj" />
     <ProjectReference Include="..\Masc Model\Masc Model.csproj" />
     <ProjectReference Include="..\MASC Web\MASC Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Integration Tests\" />
   </ItemGroup>
 
 </Project>
