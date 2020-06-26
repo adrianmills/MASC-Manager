@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using NSubstitute.Core;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnitTest.Mock_Components;
@@ -48,7 +49,7 @@ namespace UnitTest.Unit_Tests.Controllers
         }
 
         [Test]
-        public void ClubController_Index()
+        public void Index()
         {
             var httpContext = Substitute.For<HttpContext>();
             var mockSession = new MockHttpSession();
@@ -87,7 +88,7 @@ namespace UnitTest.Unit_Tests.Controllers
         }
 
         [Test]
-        public void ClubController_AddClub()
+        public void AddClub_ClubNameNotEmpty()
         {
 
             var httpContext = Substitute.For<HttpContext>();
@@ -110,7 +111,30 @@ namespace UnitTest.Unit_Tests.Controllers
         }
 
         [Test]
-        public void ClubController_ChangeName()
+        public void AddClub_ClubNameEmpty()
+        {
+
+            var httpContext = Substitute.For<HttpContext>();
+            var mockSession = new MockHttpSession();
+
+            mockSession.Set("clubs", clubData.Clubs);
+
+            httpContext.Session = mockSession;
+
+            var clubController = new ClubController(clubData)
+            {
+                ControllerContext = new ControllerContext { HttpContext = httpContext }
+            };
+
+            clubController.AddClub(string.Empty);
+
+            var clubs = httpContext.Session.Get<List<ClubDTO>>("clubs");
+
+            Assert.AreEqual(2, clubs.Count);
+        }
+
+        [Test]
+        public void ChangeName_ClubNameNotEmpty()
         {
             var httpContext = Substitute.For<HttpContext>();
             var mockSession = new MockHttpSession();
@@ -133,7 +157,50 @@ namespace UnitTest.Unit_Tests.Controllers
         }
 
         [Test]
-        public void ClubController_DeleteClub()
+        public void ChangeName_ClubNameEmpty()
+        {
+            var httpContext = Substitute.For<HttpContext>();
+            var mockSession = new MockHttpSession();
+
+            mockSession.Set("clubs", clubData.Clubs);
+
+            httpContext.Session = mockSession;
+
+            var clubController = new ClubController(clubData)
+            {
+                ControllerContext = new ControllerContext { HttpContext = httpContext }
+            };
+
+            clubController.UpdateClub(1, string.Empty);
+            var clubs = httpContext.Session.Get<List<ClubDTO>>("clubs");
+
+            var club = clubs.Where(c => c.ID == 1).FirstOrDefault();
+
+            Assert.AreEqual("Club Test 1", club.ClubName);
+        }
+        [Test]
+  
+        public void ChangeName_UnableToFindCLub()
+        {
+            var httpContext = Substitute.For<HttpContext>();
+            var mockSession = new MockHttpSession();
+
+            mockSession.Set("clubs", clubData.Clubs);
+
+            httpContext.Session = mockSession;
+
+            var clubController = new ClubController(clubData)
+            {
+                ControllerContext = new ControllerContext { HttpContext = httpContext }
+            };
+
+            Exception ex= Assert.Catch<NullReferenceException>(() => clubController.UpdateClub(10, "notpresent"));
+
+            Assert.That(ex.Message == "The club with ID 10 could not be found");
+
+        }
+        [Test]
+        public void DeleteClub()
         {
             var httpContext = Substitute.For<HttpContext>();
             var mockSession = new MockHttpSession();
@@ -155,6 +222,27 @@ namespace UnitTest.Unit_Tests.Controllers
 
             Assert.AreEqual(1, clubs.Count);
             Assert.AreEqual(1, deletedclubs.Count);
+        }
+
+        [Test]
+        public void DeleteClub_UnableToFindClub()
+        {
+            var httpContext = Substitute.For<HttpContext>();
+            var mockSession = new MockHttpSession();
+
+            mockSession.Set("clubs", clubData.Clubs);
+            mockSession.Set("deletedclubs", new List<ClubDTO>());
+
+            httpContext.Session = mockSession;
+
+            var clubController = new ClubController(clubData)
+            {
+                ControllerContext = new ControllerContext { HttpContext = httpContext }
+            };
+
+            Exception ex = Assert.Catch<NullReferenceException>(() => clubController.DeleteClub(12));
+
+            Assert.That(ex.Message == "The club with ID 12 could not be found");
         }
 
         [Test]

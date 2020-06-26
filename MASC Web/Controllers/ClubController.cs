@@ -21,38 +21,50 @@ namespace MASC_Web.Controllers
         {
             _clubData = clubData;
         }
-       
+
         // GET: ClubController
         public ActionResult Index()
         {
             HttpContext.Session.Set("clubs", _clubData.Clubs);
-            HttpContext.Session.Set("deletedclubs" , new List<IClubDTO>());
+            HttpContext.Session.Set("deletedclubs", new List<IClubDTO>());
             var clubs = _clubData.Clubs;
-            return PartialView("_list",clubs);
+            return PartialView("_list", clubs);
         }
 
 
         public void AddClub(string clubname)
         {
-            var clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
 
-            var club = new ClubDTO { ClubName = clubname };
+            if (!string.IsNullOrEmpty(clubname))
+            {
+                var clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
 
-            clubs.Add(club);
+                var club = new ClubDTO { ClubName = clubname };
 
-            HttpContext.Session.Set("clubs",clubs);
+                clubs.Add(club);
 
+                HttpContext.Session.Set("clubs", clubs);
+            }
         }
 
         public void UpdateClub(long id, string clubname)
         {
-            var clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
 
-            var club = clubs.Where(c => c.ClubID == id).FirstOrDefault();
+                if (!string.IsNullOrEmpty(clubname))
+                {
+                    var clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
 
-            club.ClubName = clubname;
+                    var club = clubs.Where(c => c.ClubID == id).FirstOrDefault();
 
-            HttpContext.Session.Set("clubs", clubs);
+                if(club==null)
+                {
+                    throw new NullReferenceException(string.Format("The club with ID {0} could not be found",id));
+                }
+                    club.ClubName = clubname;
+
+                    HttpContext.Session.Set("clubs", clubs);
+                }
+ 
         }
 
         public void DeleteClub(long id)
@@ -61,7 +73,10 @@ namespace MASC_Web.Controllers
             var deletedclubs = HttpContext.Session.Get<List<ClubDTO>>("deletedclubs");
 
             var club = clubs.Where(c => c.ID == id).FirstOrDefault();
-
+            if (club == null)
+            {
+                throw new NullReferenceException(string.Format("The club with ID {0} could not be found", id));
+            }
             clubs.Remove(club);
             deletedclubs.Add(club);
             HttpContext.Session.Set("clubs", clubs);
