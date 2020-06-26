@@ -7,7 +7,7 @@ namespace Business_Logic.DTO
 {
     public class SyllabusDTO : BaseDTO, ISyllabusDTO
     {
-        public long SyallbusID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string SyllabusName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public long SyallbusID { get; set; }
+        public string SyllabusName { get; set; }
     }
 }

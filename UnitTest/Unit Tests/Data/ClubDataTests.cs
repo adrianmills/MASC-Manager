@@ -2,6 +2,7 @@
 using Business_Logic.DTO;
 using Masc_Model.DAL;
 using Masc_Model.Model;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -169,5 +170,96 @@ namespace UnitTest.Unit_Tests.Data
             }
         }
 
+        [Test]
+        public void FindClub_ByID_NotEditable()
+        {
+            using (var context = new MASCContext(ContextOptions))
+            {
+
+                seed(context);
+                var clubData = new ClubData(context, user);
+                var club = clubData.Find(1, false);
+
+                Assert.IsTrue(club != null);
+                Assert.IsTrue(context.Entry(club).State == EntityState.Detached);
+                Assert.IsTrue(club.Name == "Club Test 1");
+            }
+        }
+
+        [Test]
+        public void FindClub_ByID_Editable()
+        {
+            using (var context = new MASCContext(ContextOptions))
+            {
+
+                seed(context);
+                var clubData = new ClubData(context, user);
+                var club = clubData.Find(2, true);
+
+                Assert.IsTrue(club != null);
+                Assert.IsTrue(context.Entry(club).State != EntityState.Detached);
+                Assert.IsTrue(club.Name == "Club Test 2");
+            }
+        }
+
+        [Test]
+        public void Findclub_ByFilter_NotEditable()
+        {
+            using (var context = new MASCContext(ContextOptions))
+            {
+
+                seed(context);
+                var clubData = new ClubData(context, user);
+                var club = clubData.Find(s => s.Name == "Club Test 2", false);
+
+                Assert.IsTrue(club != null);
+                Assert.IsTrue(context.Entry(club).State == EntityState.Detached);
+                Assert.IsTrue(club.ID == 2);
+            }
+        }
+
+        [Test]
+        public void FindClub_ByFilter_Editable()
+        {
+            using (var context = new MASCContext(ContextOptions))
+            {
+
+                seed(context);
+                var clubData = new ClubData(context, user);
+                var club = clubData.Find(s => s.Name == "Club Test 3", true);
+
+                Assert.IsTrue(club != null);
+                Assert.IsTrue(context.Entry(club).State != EntityState.Detached);
+                Assert.IsTrue(club.ID == 3);
+            }
+        }
+
+        [Test]
+        public void FindClub_ByID_NoCLubFound()
+        {
+            using (var context = new MASCContext(ContextOptions))
+            {
+
+                seed(context);
+                var clubData = new ClubData(context, user);
+                var club = clubData.Find(20, true);
+
+                Assert.IsTrue(club == null);
+            }
+            }
+
+        [Test]
+        public void FindClub_ByFilter_NoCLubFound()
+        {
+            using (var context = new MASCContext(ContextOptions))
+            {
+
+                seed(context);
+                var clubData = new ClubData(context, user);
+                var club = clubData.Find(s=>s.Name=="Not Present", true);
+
+                Assert.IsTrue(club == null);
+            }
+        }
     }
 }

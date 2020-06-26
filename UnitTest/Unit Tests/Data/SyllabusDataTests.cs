@@ -62,7 +62,6 @@ namespace UnitTest.Unit_Tests.Data
         }
 
         [Test]
-        [Ignore("Still in development")]
         public void GetList()
         {
             using (var context = new MASCContext(ContextOptions))
