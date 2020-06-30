@@ -9,16 +9,15 @@ namespace Masc_Model.Model.Interface
 
          long ID { get; set; }
 
-         DateTime CreatedOn { get; set; }
-
-         string CreatedBy { get; set; }
-
-
-         string ModifiedBy { get; set; }
-
-         DateTime? ModifiedOn { get; set; }
-
          bool Deleted { get; set; }
 
+        DateTime CreatedOn { get; set; }
+
+        string CreatedBy { get; set; }
+
+
+        string ModifiedBy { get; set; }
+
+        DateTime? ModifiedOn { get; set; }
     }
 }

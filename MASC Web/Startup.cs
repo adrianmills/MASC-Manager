@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Business_Logic.AutoMapProfiles;
 using Masc_Model.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +27,9 @@ namespace MASC_Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+            services.AddAutoMapper(typeof(MASCProfiles));
             services.AddControllersWithViews();
             services.AddDbContext<MASCContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MascContext")));
         }

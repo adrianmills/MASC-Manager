@@ -15,44 +15,6 @@ namespace Masc_Model.Model
         [Required]
         public long AddressId {get;set; }
 
-        [NotMapped]
-        public bool Adult
-
-        {
-            get
-            {
-                if (Age >= 18)
-                {
-                    return true;
-                }
-                else
-                {
-
-                    return false;
-                }
-            }
-        }
-
-        [NotMapped]
-        public int Age
-    {
-        get
-        {
-                int age = 0;
-
-                if (DateofBirth.HasValue)
-                {
-                    DateTime dob = DateofBirth.Value;
-                    age = DateTime.Now.Year - dob.Year;
-
-                    if (DateTime.Now.DayOfYear < dob.DayOfYear)
-                        age = age - 1;
-                }
-
-                return age;
-        }
-    }
-
         public Club Club {get;set; }
         [Required]
         public long ClubID {get;set; }
@@ -70,18 +32,7 @@ namespace Masc_Model.Model
         [Required]
 
         public string Forename {get;set; }
-
-        [NotMapped]
-        public string Fullname
-        {
-            get
-            {
-                return Forename + " " + Surname;
-            }
-        }
-
-        [NotMapped]
-        public string Grade {get;set; }
+   
         public ICollection<GradingHistory> GradingHistories {get;set; }
         public DateTime? LastAttended {get;set; }
         public DateTime? LicenceRenewelDate {get;set; }

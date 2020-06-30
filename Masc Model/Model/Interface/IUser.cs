@@ -18,5 +18,7 @@ bool ChangePasswordOnLogon { get; set; }
 
          DateTime? LastLoggedOn { get; set; }
         bool AccountLocked { get; set; }
+
+        bool Manager { get; set; }
     }
 }

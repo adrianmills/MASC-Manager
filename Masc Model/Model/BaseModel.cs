@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Masc_Model.Model
 {
-    public abstract class BaseModel : IBase
+    public abstract class BaseModel 
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -32,6 +32,6 @@ namespace Masc_Model.DAL
         public virtual DbSet<Grade> Grades { get; set; }
 
         public virtual DbSet<Address> Addresses { get; set; }
-
+        public DbSet<User> Users { get; set; }
     }
 }

@@ -1,6 +1,8 @@
-﻿using Business_Logic.DataRetrival.Interface;
+﻿using AutoMapper;
+using Business_Logic.DataRetrival.Interface;
 using Business_Logic.DTO;
 using Business_Logic.DTO.Interface;
+using Business_Logic.View_Model.Interface;
 using Masc_Model.DAL;
 using Masc_Model.Model;
 using Masc_Model.Model.Interface;
@@ -16,68 +18,47 @@ namespace Business_Logic.DataRetrival
 {
     public class SyllabusData : BaseData, ISyllabusData
     {
-        MASCContext _context;
+ 
 
-        public SyllabusData(MASCContext context, IUser user) : base(user)
+        public SyllabusData(MASCContext context,IMapper mapper, IUser user) : base(context,mapper, user)
         {
-            _context = context;
+            
 
         }
-        public IEnumerable<ISyllabusDTO> Syllabi
-        {
-            get
-            {
-                List<ISyllabusDTO> syllabi = new List<ISyllabusDTO>();
 
-                syllabi.AddRange(from s in _context.Syllabi
-                                 where !s.Deleted
-                                 select new SyllabusDTO
-                                 {
-                                     ID = s.ID,
-                                     SyllabusName = s.Name
-                                 });
-                return syllabi;
-            }
+        public IEnumerable<ISyllabusDTO> Syllabi => throw new NotImplementedException();
+
+        public bool Add(ISyllabusViewModel record)
+        {
+            throw new NotImplementedException();
         }
 
         public void Delete(long id)
         {
-            Delete(Find(id, true));
+            throw new NotImplementedException();
         }
 
-        public void Delete(ISyllabus record)
+        public void Delete(ISyllabusViewModel record)
         {
-            AddDetails(record, false);
-            record.Deleted = true;
+            throw new NotImplementedException();
         }
 
-        public ISyllabus Find(long id, bool isEdit)
+        public ISyllabusViewModel Find(long id, bool isEdit)
         {
-            return Find(s => s.ID == id, isEdit);
+            throw new NotImplementedException();
         }
 
-        public ISyllabus Find(Expression<Func<ISyllabus, bool>> filter, bool isEdit)
+        public ISyllabusViewModel Find(Expression<Func<ISyllabusViewModel, bool>> filter, bool isEdit)
         {
-            ISyllabus syllabus;
-
-            if(isEdit)
-            {
-                syllabus = (from s in _context.Syllabi
-                            .Where(filter)
-                            select s).FirstOrDefault();
-            }
-            else
-            {
-                syllabus = (from s in _context.Syllabi
-                           .Where(filter)
-                           .AsNoTracking()
-                            select s).FirstOrDefault();
-            }
-
-            return syllabus;
+            throw new NotImplementedException();
         }
 
         public bool ProccessSyllabi(ISyllabusDataItems dataItems)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(ISyllabusViewModel record)
         {
             throw new NotImplementedException();
         }

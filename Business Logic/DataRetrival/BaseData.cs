@@ -1,4 +1,6 @@
-﻿using Business_Logic.DataRetrival.Interface;
+﻿using AutoMapper;
+using Business_Logic.DataRetrival.Interface;
+using Masc_Model.DAL;
 using Masc_Model.Model.Interface;
 using System;
 using System.Collections.Generic;
@@ -9,10 +11,14 @@ namespace Business_Logic.DataRetrival
     public abstract class BaseData : IBaseData
     {
 
-        IUser _user;
+       protected IUser _user;
+        protected IMapper _mapper;
+        protected MASCContext _context;
 
-        public BaseData(IUser user)
+        public BaseData(MASCContext context,IMapper mapper, IUser user)
         {
+            _context = context;
+            _mapper = mapper;
             _user = user;
         }
         public void AddDetails(IBase record, bool newRecord= false)

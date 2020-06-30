@@ -1,4 +1,5 @@
-﻿using Business_Logic.DataRetrival.Interface;
+﻿using AutoMapper;
+using Business_Logic.DataRetrival.Interface;
 using Business_Logic.View_Model.Interface;
 using Masc_Model.DAL;
 using Masc_Model.Model;
@@ -15,53 +16,42 @@ namespace Business_Logic.DataRetrival
 {
    public class StudentData:BaseData,IStudentData
     {
-        MASCContext _context;
+  
 
-        public StudentData(MASCContext context, IUser user) : base(user)
+        public StudentData(MASCContext context,IMapper mapper, IUser user) : base(context, mapper, user)
         {
-            _context = context;
+            
+            
         }
 
-        public IEnumerable<IStudent> Students
-        {
-            get
-            {
-                return _context.Students.Where(s => !s.Deleted);
-            }
-        }
+        public IEnumerable<IStudentViewModel> Students => throw new NotImplementedException();
 
-        public bool Add(IStudent record)
+        public bool Add(IStudentViewModel record)
         {
-            try
-            {
-                AddDetails(record, true);
-                _context.Students.Add((Student)record);
-               _context.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
+            throw new NotImplementedException();
         }
 
         public void Delete(long id)
         {
-            throw new NotImplementedException(); 
+            throw new NotImplementedException();
         }
 
-        public void Delete(IStudent record)
+        public void Delete(IStudentViewModel record)
         {
             throw new NotImplementedException();
         }
 
-        public IStudent Find(long id, bool isEdit)
+        public IStudentViewModel Detail(long ID)
         {
             throw new NotImplementedException();
         }
 
-        public IStudent Find(Expression<Func<IStudent, bool>> filter, bool isEdit)
+        public IStudentViewModel Find(long id, bool isEdit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IStudentViewModel Find(Expression<Func<IStudentViewModel, bool>> filter, bool isEdit)
         {
             throw new NotImplementedException();
         }
@@ -71,7 +61,7 @@ namespace Business_Logic.DataRetrival
             throw new NotImplementedException();
         }
 
-        public bool Update(IStudent record)
+        public bool Update(IStudentViewModel record)
         {
             throw new NotImplementedException();
         }

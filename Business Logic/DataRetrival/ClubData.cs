@@ -1,151 +1,99 @@
-﻿using Business_Logic.DataRetrival.Interface;
-using Business_Logic.DTO;
-using Business_Logic.DTO.Interface;
+﻿using AutoMapper;
+using Business_Logic.DataRetrival.Data_Items.Interface;
+using Business_Logic.DataRetrival.Interface;
+using Business_Logic.View_Model.Interface;
 using Masc_Model.DAL;
-using Masc_Model.Model;
 using Masc_Model.Model.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 
 namespace Business_Logic.DataRetrival
 {
     public class ClubData : BaseData, IClubData
     {
-        MASCContext _context;
 
-        public ClubData(MASCContext context, IUser user) : base(user)
+        public ClubData(MASCContext context,IMapper mapper, IUser user) : base(context, mapper, user)
         {
-            _context = context;
+  
         }
 
-        public IEnumerable<IClubDTO  > Clubs 
-        { 
+        public IEnumerable<IClubViewModel> Clubs
+        {
             get
             {
-                List<IClubDTO> clubs = new List<IClubDTO>();
-
-                clubs.AddRange(from c in _context.Clubs
+                var clubs = new List<IClubViewModel>();
+                IEnumerable<IClub> rawClubs;
+                if(_user.Manager)
+                {
+                    rawClubs = from c in _context.Clubs
+                               .Include(m=>m.Manager)
                                where !c.Deleted
-                               select new ClubDTO
-                               {
-                                   ID = c.ID,
-                                   ClubName = c.Name
-                               });
+                                select c;
+                }
+                else
+                {
+                    rawClubs = from c in _context.Clubs
+                               .Include(m => m.Manager)
+                               where !c.Deleted && c.ManagerID==_user.ID
+                               select c;
+                }
 
+                foreach(var rawClub in rawClubs)
+                {
+                    var club = _mapper.Map<IClub, IClubViewModel>(rawClub);
+                    clubs.Add(club);
+                }
                 return clubs;
+
+
             }
         }
 
-        void Add(IClub record)
+        public bool Add(IClubViewModel record)
         {
-            AddDetails(record, true);
-            _context.Clubs.Add((Club)record);
+            throw new NotImplementedException();
         }
 
         public void Delete(long id)
         {
-            Delete(Find(id, true));
-
-
+            throw new NotImplementedException();
         }
 
-        public void Delete(IClub record)
+        public void Delete(IClubViewModel record)
         {
-            AddDetails(record, false);
-            record.Deleted = true;
+            throw new NotImplementedException();
         }
 
-        public IClub Find(long id, bool isEdit)
+        public IClubViewModel Detail(long ID)
         {
-            return Find(c => c.ID == id, isEdit);
+            throw new NotImplementedException();
         }
 
-        public IClub Find(Expression<Func<IClub, bool>> filter, bool isEdit)
+        public IClubViewModel Find(long id, bool isEdit)
         {
-            IClub club;
+            throw new NotImplementedException();
+        }
 
-            if (isEdit)
-            {
-                club = (from c in _context.Clubs
-                        .Where(filter)
-                        select c).FirstOrDefault();
-            }
-            else
-            {
-                club = (from c in _context.Clubs
-                        .AsNoTracking()
-                        .Where(filter)
-                        select c).FirstOrDefault();
-            }
-
-
-
-            return club;
+        public IClubViewModel Find(Expression<Func<IClubViewModel, bool>> filter, bool isEdit)
+        {
+            throw new NotImplementedException();
         }
 
         public bool ProccessClubs(IClubDataItems dataItems)
         {
-            try
-            {
-                IClub club=null;
-                foreach (IClubDTO c in dataItems.Clubs)
-                {
-                    if (c.ID == 0)
-                    {
-                        club = new Club { ID=0,Name = c.ClubName };
-                        //AddDetails(club, true);
-                        Add(club);
-                    }
-                    else
-                    {
-                        club = Find(c.ID, true);
-
-                        if (club.Name != c.ClubName)
-
-                        {
-                            club.Name = c.ClubName;
-                            //AddDetails(club);
-                            _context.Clubs.Update((Club)club);
-                        }
-                    }
-                }
-
-                foreach(IClubDTO c in dataItems.DeletedClubs)
-                {
-                    Delete(c.ID);
-                }    
-                _context.SaveChanges();
-                return true;
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
+            throw new NotImplementedException();
         }
 
-        void Update(IClub record)
+        public bool Update(IClubViewModel record)
         {
-            AddDetails(record, false);
+            throw new NotImplementedException();
         }
     }
 
-    public class ClubDataItems : IClubDataItems
-    {
-
-        public ClubDataItems()
-        {
-            Clubs = new List<ClubDTO>();
-            DeletedClubs = new List<ClubDTO>();
-        }
-
-        public List<ClubDTO> Clubs { get; set; }
-        public List<ClubDTO> DeletedClubs { get; set; }
-    }
+    
 
 
 }

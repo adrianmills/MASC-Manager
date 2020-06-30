@@ -7,10 +7,12 @@ using System.Text;
 namespace Business_Logic.DataRetrival.Interface
 {
    
-   public interface IStudentData : IDataOperationFindAndDelete<IStudent>, IDataOperationAddAndUpdate<IStudent>
+   public interface IStudentData : IDataOperationFindAndDelete<IStudentViewModel>
+                                 , IDataOperationAddAndUpdate<IStudentViewModel>
+                                 , IDatabaseOperationDetail<IStudentViewModel>
     {
 
-        IEnumerable<IStudent> Students { get;}
+        IEnumerable<IStudentViewModel> Students { get;}
 
         void PopulateLists(IStudentViewModel viewModel);
     }

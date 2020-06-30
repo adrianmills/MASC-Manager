@@ -1,6 +1,9 @@
-﻿using Masc_Model.DAL;
+﻿using AutoMapper;
+using Business_Logic.AutoMapProfiles;
+using Masc_Model.DAL;
 using Masc_Model.Model;
 using Masc_Model.Model.Interface;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using NUnit.Framework;
@@ -13,12 +16,30 @@ namespace UnitTest.Unit_Tests.Data
 {
     public abstract class BaseDataTest
     {
-        internal IUser user;
+        protected IUser userNoManager;
+        protected IUser userManager;
+        protected IMapper mapper;
 
-        internal MockData data = new MockData();
+        protected MockData data = new MockData();
         public BaseDataTest()
         {
-            user = new User { ID = 1, UserName = "Unit Test", Deleted = false, CreatedBy = "am", CreatedOn = DateTime.Now };
+            
+
+
+        }
+
+        [SetUp]
+        public void Configure()
+        {
+            userManager = new User { ID = 1, UserName = "Unit Test Manager", Deleted = false, CreatedBy = "am", CreatedOn = DateTime.Now, Manager = true };
+            userNoManager = new User { ID = 2, UserName = "Unit test Not a Manager", Deleted = false, CreatedBy = "am", CreatedOn = DateTime.Now, Manager = false };
+
+            var config = new MapperConfiguration(opts =>
+            {
+                opts.AddProfile(new MASCProfiles());
+            });
+
+            mapper = config.CreateMapper();
         }
 
         internal DbContextOptions<MASCContext> ContextOptions

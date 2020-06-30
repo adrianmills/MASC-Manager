@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Business_Logic.DTO.Interface
 {
-   public interface ISyllabusDTO
+   public interface ISyllabusDTO:IBaseDTO
     {
         long SyallbusID { get; set; }
 

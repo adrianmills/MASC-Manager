@@ -21,5 +21,7 @@ namespace Masc_Model.Model
         public int LogOnAttempts {get;set;}
         public DateTime? LastLoggedOn {get;set;}
         public bool AccountLocked {get;set;}
+
+        public bool Manager { get; set; }
     }
 }

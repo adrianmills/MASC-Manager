@@ -10,8 +10,7 @@ namespace Masc_Model.Model.Interface
         [ForeignKey("AddressID")]
         Address Address { get; set; }
         long AddressId { get; set; }
-        bool Adult { get; }
-        int Age { get; }
+
         Club Club { get; set; }
         long ClubID { get; set; }
 
@@ -20,8 +19,8 @@ namespace Masc_Model.Model.Interface
         ICollection<StudentDisability> Disabilities { get; set; }
         string EmailAddress { get; set; }
         string Forename { get; set; }
-        string Fullname { get; }
-        string Grade { get; set; }
+        
+        
         ICollection<GradingHistory> GradingHistories { get; set; }
         DateTime? LastAttended { get; set; }
         DateTime? LicenceRenewelDate { get; set; }

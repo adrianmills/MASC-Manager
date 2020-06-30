@@ -1,8 +1,13 @@
-﻿using Business_Logic.DataRetrival;
+﻿using AutoMapper;
+using Business_Logic.DataRetrival;
+using Business_Logic.DataRetrival.Data_Items;
+using Business_Logic.DataRetrival.Data_Items.Interface;
 using Business_Logic.DataRetrival.Interface;
 using Business_Logic.DTO;
 using Business_Logic.DTO.Interface;
 using Business_Logic.Session;
+using Business_Logic.View_Model;
+using Masc_Model.Model;
 using Masc_Model.Model.Interface;
 using MASC_Web.Controllers;
 using Microsoft.AspNetCore.Http;
@@ -32,10 +37,11 @@ namespace UnitTest.Unit_Tests.Controllers
 
         [SetUp]
         public void Intilise()
-        {
+        { 
+
             clubData = Substitute.For<IClubData>();
 
-            clubData.Clubs.Returns(data.MockClubsDTO);
+            clubData.Clubs.Returns(data.MockClubsViewData);
 
             var dataitems = new ClubDataItems();
 

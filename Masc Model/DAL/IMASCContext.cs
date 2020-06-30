@@ -12,5 +12,7 @@ namespace Masc_Model.DAL
         DbSet<StudentDisability> StudentDisabilities { get; set; }
         DbSet<Student> Students { get; set; }
         DbSet<Syllabus> Syllabi { get; set; }
+
+        DbSet<User> Users { get; set; }
     }
 }
