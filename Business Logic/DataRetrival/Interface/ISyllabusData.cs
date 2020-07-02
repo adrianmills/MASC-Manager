@@ -8,8 +8,8 @@ using System.Text;
 
 namespace Business_Logic.DataRetrival.Interface
 {
-    public interface ISyllabusData : IDataOperationAddAndUpdate<ISyllabusViewModel>
-                                   , IDataOperationFindAndDelete<ISyllabusViewModel>
+    public interface ISyllabusData : IDataOperationAddAndUpdate<ISyllabusViewModel>,
+                                     IDatabaseOperationDetail<ISyllabusViewModel>
     {
         IEnumerable<ISyllabusDTO> Syllabi { get; }
         bool ProccessSyllabi(ISyllabusDataItems dataItems);

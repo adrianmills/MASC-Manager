@@ -43,7 +43,12 @@ namespace Business_Logic.View_Model
             }
         }
 
-        public string Fullname {get;}
+        public string Fullname {
+            get
+            {
+                return Forename + " " + Surname;
+            }
+                }
 
         public SelectList Clubs { get;set;}
         public SelectList Syllabi { get;set;}
@@ -51,7 +56,7 @@ namespace Business_Logic.View_Model
 
         public Address Address { get;set;}
         public long AddressId { get;set;}
-        public Club Club { get;set;}
+        public string ClubName { get;set;}
         public long ClubID { get;set;}
         public string ContactPhoneNumber { get;set;}
         public DateTime? DateofBirth { get;set;}
@@ -65,10 +70,10 @@ namespace Business_Logic.View_Model
         public string ReferralSource { get;set;}
         public DateTime? Started { get;set;}
         public string Surname { get;set;}
-        public Syllabus Syllabus { get;set;}
+        public string SyllabusName { get;set;}
         public long SyllabusID { get;set;}
         public DateTime? UpdateDoneOn { get;set;}
-        public long ID { get;set;}
+        public long StudentID { get;set;}
         public bool Deleted { get;set;}
     }
 }

@@ -18,21 +18,29 @@ namespace UnitTest.Unit_Tests.Data
     {
         protected IUser userNoManager;
         protected IUser userManager;
+        protected IUser usernotMangerwithNoClubs; 
         protected IMapper mapper;
 
-        protected MockData data = new MockData();
+        protected MockData data;
         public BaseDataTest()
         {
             
 
 
         }
-
+        protected virtual void seed(MASCContext context)
+        {
+            foreach (var u in data.Users)
+            {
+                context.Users.Add((User)u);
+            }
+        }
         [SetUp]
         public void Configure()
         {
             userManager = new User { ID = 1, UserName = "Unit Test Manager", Deleted = false, CreatedBy = "am", CreatedOn = DateTime.Now, Manager = true };
             userNoManager = new User { ID = 2, UserName = "Unit test Not a Manager", Deleted = false, CreatedBy = "am", CreatedOn = DateTime.Now, Manager = false };
+            usernotMangerwithNoClubs = new User { ID = 3, UserName = "Unit test Not a Manager", Deleted = false, CreatedBy = "am", CreatedOn = DateTime.Now, Manager = false };
 
             var config = new MapperConfiguration(opts =>
             {
@@ -40,6 +48,7 @@ namespace UnitTest.Unit_Tests.Data
             });
 
             mapper = config.CreateMapper();
+            data = new MockData(mapper);
         }
 
         internal DbContextOptions<MASCContext> ContextOptions

@@ -8,8 +8,11 @@ namespace Business_Logic.DataRetrival.Interface
 {
     public interface IDataOperationAddAndUpdate<T> where T : IViewModelBase
     {
-        bool Add(T record);
+        void Add(T record);
 
-        bool Update(T record);
+        void Update(T record);
+
+        void Delete(long id);
+
     }
 }

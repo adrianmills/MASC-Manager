@@ -8,22 +8,22 @@ using System.Text;
 
 namespace Business_Logic.DataRetrival
 {
-    public abstract class BaseData : IBaseData
+    public abstract class BaseData
     {
 
-       protected IUser _user;
+        protected IUser _user;
         protected IMapper _mapper;
         protected MASCContext _context;
 
-        public BaseData(MASCContext context,IMapper mapper, IUser user)
+        public BaseData(MASCContext context, IMapper mapper, IUser user)
         {
             _context = context;
             _mapper = mapper;
             _user = user;
         }
-        public void AddDetails(IBase record, bool newRecord= false)
+        protected void AddDetails(IBase record, bool newRecord = false)
         {
-           
+
             if (newRecord)
             {
                 record.CreatedBy = _user.UserName;

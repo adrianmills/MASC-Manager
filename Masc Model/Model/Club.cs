@@ -14,6 +14,7 @@ namespace Masc_Model.Model
         public string Name { get;set;}
         public ICollection<Student> Students { get;set;}
 
+        [Required]
       public  long ManagerID { get; set; }
 
         [ForeignKey("ManagerID")]

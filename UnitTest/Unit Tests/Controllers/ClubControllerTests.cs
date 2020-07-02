@@ -7,6 +7,7 @@ using Business_Logic.DTO;
 using Business_Logic.DTO.Interface;
 using Business_Logic.Session;
 using Business_Logic.View_Model;
+using Business_Logic.View_Model.Interface;
 using Masc_Model.Model;
 using Masc_Model.Model.Interface;
 using MASC_Web.Controllers;
@@ -19,37 +20,33 @@ using NSubstitute.Core;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Policy;
 using UnitTest.Mock_Components;
 
 namespace UnitTest.Unit_Tests.Controllers
 {
     public class ClubControllerTests : ControllerBaseTest
     {
-        int counter = 0;
-        int callCounter = 0;
+
 
         IClubData clubData;
-        IClubDTO club = new ClubDTO { ID = 2, ClubName = "Test 2" };
-        IClubDTO dclub = new ClubDTO { ID = 1, ClubName = "Test 1" };
-
-        IClubDataItems testItems;
 
         [SetUp]
         public void Intilise()
-        { 
+        {
+
 
             clubData = Substitute.For<IClubData>();
 
-            clubData.Clubs.Returns(data.MockClubsViewData);
+            clubData.Clubs.Returns(data.ClubsViewData);
 
-            var dataitems = new ClubDataItems();
+            var clubDetail = data.ClubsViewData.Where(c => c.ClubID == 1).FirstOrDefault();
+            clubDetail.Students = data.StudentsViewData.Where(s => s.ClubID == 1);
+            clubDetail.Manager = data.Users.Where(u => u.ID == clubDetail.ManagerID).First().UserName;
 
-            dataitems.Clubs.Add((ClubDTO)club);
-            dataitems.DeletedClubs.Add((ClubDTO)dclub);
-
-            clubData.When(x => x.ProccessClubs(dataitems)).Do(x => counter++);
-            clubData.When(x => x.ProccessClubs(Arg.Any<IClubDataItems>())).Do(x => testItems=x.Arg<IClubDataItems>());
+            clubData.Detail(1).Returns(clubDetail);
 
 
         }
@@ -57,234 +54,195 @@ namespace UnitTest.Unit_Tests.Controllers
         [Test]
         public void Index()
         {
-            var httpContext = Substitute.For<HttpContext>();
-            var mockSession = new MockHttpSession();
-            httpContext.Session = mockSession;
-            httpContext.Request.Returns(Substitute.For<HttpRequest>());
-            httpContext.Response.Returns(Substitute.For<HttpResponse>());
+            //var httpContext = Substitute.For<HttpContext>();
+            //var mockSession = new MockHttpSession();
+            //httpContext.Session = mockSession;
+            //httpContext.Request.Returns(Substitute.For<HttpRequest>());
+            //httpContext.Response.Returns(Substitute.For<HttpResponse>());
 
 
 
-            var services = new ServiceCollection();
-            services.AddMvc();
+            //var services = new ServiceCollection();
+            //services.AddMvc();
 
-            var clubController = new ClubController(clubData)
-            {
-                ControllerContext = new ControllerContext
-                {
-                    HttpContext = httpContext
-                }
-            };
+            var clubController = new ClubController(clubData);
+            //{
+            //    ControllerContext = new ControllerContext
+            //    {
+            //        HttpContext = httpContext
+            //    }
+            //};
 
-            clubController.TempData = Substitute.For<ITempDataDictionary>();
+            //clubController.TempData = Substitute.For<ITempDataDictionary>();
 
             var result = clubController.Index() as PartialViewResult;
 
 
-            var resultdata = result.ViewData.Model as List<IClubDTO>;
-            var clubs = httpContext.Session.Get<List<ClubDTO>>("clubs");
-            var deletedclubs = httpContext.Session.Get<List<ClubDTO>>("deletedclubs");
+            var resultdata = result.ViewData.Model as List<IClubViewModel>;
             Assert.AreEqual("_list", result.ViewName);
             Assert.AreEqual(2, resultdata.Count);
-            Assert.AreEqual(2, clubs.Count);
-            Assert.AreEqual(0, deletedclubs.Count);
+        }
 
+
+        [Test]
+        public void DetailView()
+        {
+            var clubController = new ClubController(clubData);
+            var result = clubController.Details(1) as PartialViewResult;
+
+            var resultData = result.ViewData.Model as IClubViewModel;
+
+            Assert.AreEqual("_detail", result.ViewName);
+            Assert.IsNotNull(resultData);
+            Assert.AreEqual(3, resultData.Students.Count());
+        }
+
+        [Test]
+        public void Create_Get()
+        {
+
+            var clubController = new ClubController(clubData);
+            var result = clubController.Create() as PartialViewResult;
+
+            Assert.AreEqual("_create", result.ViewName);
+
+        }
+
+        [Test]
+        public void Create_Post_AllDetails()
+        {
+            IClubViewModel clubReturned = null;
+            clubData.When(x => x.Add(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
+            var clubController = new ClubController(clubData);
+
+            var club = new ClubViewModel();
+            club.ManagerID = 1;
+            club.ClubName = "Add Test Club";
+
+            var result = clubController.Create(club) as RedirectToActionResult;
+
+
+            Assert.IsNotNull(clubReturned);
+            Assert.AreEqual(0, clubReturned.ClubID);
+            Assert.AreEqual("Add Test Club", clubReturned.ClubName);
+            Assert.AreEqual(1, club.ManagerID);
+            Assert.AreEqual("Index", result.ActionName);
 
 
         }
 
         [Test]
-        public void AddClub_ClubNameNotEmpty()
+        public void ModeValidation_MissingClubName()
         {
+            var result = new List<ValidationResult>();
+            var club = new ClubViewModel();
+            club.ClubName = string.Empty;
+            club.ManagerID = 1;
 
-            var httpContext = Substitute.For<HttpContext>();
-            var mockSession = new MockHttpSession();
+            var isValid = Validator.TryValidateObject(club, new System.ComponentModel.DataAnnotations.ValidationContext(club), result);
 
-            mockSession.Set("clubs", clubData.Clubs);
+            Assert.IsFalse(isValid);
+            Assert.AreEqual(1, result.Count);
 
-            httpContext.Session = mockSession;
-
-            var clubController = new ClubController(clubData)
-            {
-                ControllerContext = new ControllerContext { HttpContext = httpContext }
-            };
-
-            clubController.AddClub("Club Test 4");
-
-            var clubs = httpContext.Session.Get<List<ClubDTO>>("clubs");
-
-            Assert.AreEqual(3, clubs.Count);
+            Assert.AreEqual("ClubName", result[0].MemberNames.ElementAt(0));
+            Assert.AreEqual("The Club Name field is required.", result[0].ErrorMessage);
         }
 
         [Test]
-        public void AddClub_ClubNameEmpty()
+        public void ModeValidation_MissingManager()
         {
+            var result = new List<ValidationResult>();
+            var club = new ClubViewModel();
+            club.ClubName = "Test ";
+           
 
-            var httpContext = Substitute.For<HttpContext>();
-            var mockSession = new MockHttpSession();
 
-            mockSession.Set("clubs", clubData.Clubs);
+            var isValid = Validator.TryValidateObject(club, new System.ComponentModel.DataAnnotations.ValidationContext(club), result);
 
-            httpContext.Session = mockSession;
+            Assert.IsFalse(isValid);
+            Assert.AreEqual(1, result.Count);
 
-            var clubController = new ClubController(clubData)
-            {
-                ControllerContext = new ControllerContext { HttpContext = httpContext }
-            };
-
-            clubController.AddClub(string.Empty);
-
-            var clubs = httpContext.Session.Get<List<ClubDTO>>("clubs");
-
-            Assert.AreEqual(2, clubs.Count);
+            Assert.AreEqual("ManagerID", result[0].MemberNames.ElementAt(0));
+            Assert.AreEqual("The Manager field is required.", result[0].ErrorMessage);
         }
 
         [Test]
-        public void ChangeName_ClubNameNotEmpty()
+        public void Edit_Post_ControllerReturnstoView()
         {
-            var httpContext = Substitute.For<HttpContext>();
-            var mockSession = new MockHttpSession();
+            IClubViewModel clubReturned = null;
+            clubData.When(x => x.Add(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
+            var clubController = new ClubController(clubData);
+            var club = new ClubViewModel();
+        
 
-            mockSession.Set("clubs", clubData.Clubs);
+            clubController.ModelState.AddModelError("ClubName", "ClubName is required field");
 
-            httpContext.Session = mockSession;
+            var result = clubController.Create(club) as PartialViewResult;
 
-            var clubController = new ClubController(clubData)
-            {
-                ControllerContext = new ControllerContext { HttpContext = httpContext }
-            };
 
-            clubController.UpdateClub(1, "unit 1");
-            var clubs = httpContext.Session.Get<List<ClubDTO>>("clubs");
-
-            var club = clubs.Where(c => c.ID == 1).FirstOrDefault();
-
-            Assert.AreEqual("unit 1", club.ClubName);
+            Assert.IsNull(clubReturned);
+            Assert.AreEqual(1, result.ViewData.ModelState.ErrorCount);
+            Assert.AreEqual("_create", result.ViewName);
         }
 
         [Test]
-        public void ChangeName_ClubNameEmpty()
+        public void Edit_Get()
         {
-            var httpContext = Substitute.For<HttpContext>();
-            var mockSession = new MockHttpSession();
 
-            mockSession.Set("clubs", clubData.Clubs);
+            var clubController = new ClubController(clubData);
+            var result = clubController.Create() as PartialViewResult;
 
-            httpContext.Session = mockSession;
+            Assert.AreEqual("_edit", result.ViewName);
+            Assert.IsNotNull(result.ViewData.Model);
 
-            var clubController = new ClubController(clubData)
-            {
-                ControllerContext = new ControllerContext { HttpContext = httpContext }
-            };
-
-            clubController.UpdateClub(1, string.Empty);
-            var clubs = httpContext.Session.Get<List<ClubDTO>>("clubs");
-
-            var club = clubs.Where(c => c.ID == 1).FirstOrDefault();
-
-            Assert.AreEqual("Club Test 1", club.ClubName);
-        }
-        [Test]
-  
-        public void ChangeName_UnableToFindCLub()
-        {
-            var httpContext = Substitute.For<HttpContext>();
-            var mockSession = new MockHttpSession();
-
-            mockSession.Set("clubs", clubData.Clubs);
-
-            httpContext.Session = mockSession;
-
-            var clubController = new ClubController(clubData)
-            {
-                ControllerContext = new ControllerContext { HttpContext = httpContext }
-            };
-
-            Exception ex= Assert.Catch<NullReferenceException>(() => clubController.UpdateClub(10, "notpresent"));
-
-            Assert.That(ex.Message == "The club with ID 10 could not be found");
-
-        }
-        [Test]
-        public void DeleteClub()
-        {
-            var httpContext = Substitute.For<HttpContext>();
-            var mockSession = new MockHttpSession();
-
-            mockSession.Set("clubs", clubData.Clubs);
-            mockSession.Set("deletedclubs", new List<ClubDTO>());
-
-            httpContext.Session = mockSession;
-
-            var clubController = new ClubController(clubData)
-            {
-                ControllerContext = new ControllerContext { HttpContext = httpContext }
-            };
-
-            clubController.DeleteClub(2);
-
-            var clubs = mockSession.Get<List<ClubDTO>>("clubs");
-            var deletedclubs = mockSession.Get<List<ClubDTO>>("deletedclubs");
-
-            Assert.AreEqual(1, clubs.Count);
-            Assert.AreEqual(1, deletedclubs.Count);
         }
 
         [Test]
-        public void DeleteClub_UnableToFindClub()
+        public void Edit_Post_AllDetails()
         {
-            var httpContext = Substitute.For<HttpContext>();
-            var mockSession = new MockHttpSession();
+            IClubViewModel clubReturned = null;
+            clubData.When(x => x.Add(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
+            var clubController = new ClubController(clubData);
 
-            mockSession.Set("clubs", clubData.Clubs);
-            mockSession.Set("deletedclubs", new List<ClubDTO>());
+            var club = new ClubViewModel();
+            club.ManagerID = 1;
+            club.ClubName = "Add Test Club";
 
-            httpContext.Session = mockSession;
+            var result = clubController.Create(club) as RedirectToActionResult;
 
-            var clubController = new ClubController(clubData)
-            {
-                ControllerContext = new ControllerContext { HttpContext = httpContext }
-            };
 
-            Exception ex = Assert.Catch<NullReferenceException>(() => clubController.DeleteClub(12));
+            Assert.IsNotNull(clubReturned);
+            Assert.AreEqual(0, clubReturned.ClubID);
+            Assert.AreEqual("Add Test Club", clubReturned.ClubName);
+            Assert.AreEqual(1, club.ManagerID);
+            Assert.AreEqual("Index", result.ActionName);
 
-            Assert.That(ex.Message == "The club with ID 12 could not be found");
+
         }
 
         [Test]
-        public void SaveChanges_CorrectParameters()
+        public void Edit_Post_ModelValidation()
         {
-           List<ClubDTO> clubs = new List<ClubDTO>();
-            clubs.Add((ClubDTO)club);
+            IClubViewModel clubReturned = null;
+            clubData.When(x => x.Add(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
+            var clubController = new ClubController(clubData);
 
-            List<ClubDTO> dclubs = new List<ClubDTO>();
-            dclubs.Add((ClubDTO)dclub);
+            var club = new ClubViewModel();
+            club.ManagerID = 1;
+            clubController.ModelState.AddModelError("ClubName", "ClubName is required field");
 
-            var httpContext = Substitute.For<HttpContext>();
-            var mockSession = new MockHttpSession();
+            var result = clubController.Create(club) as PartialViewResult;
 
-            mockSession.Set("clubs", clubs);
-            mockSession.Set("deletedclubs", dclubs);
 
-            httpContext.Session = mockSession;
+            Assert.IsNull(clubReturned);
+            Assert.AreEqual(1, result.ViewData.ModelState.ErrorCount);
+            Assert.AreEqual("_create", result.ViewName);
 
-            var clubController = new ClubController(clubData)
-            {
-                ControllerContext = new ControllerContext { HttpContext = httpContext }
-            };
-            
 
-            clubController.SaveChanges();
-            IClubDTO clubTest;
 
-            Assert.AreEqual(1, testItems.Clubs.Count);
-            clubTest = testItems.Clubs[0];
-            Assert.IsTrue(CompareObject.Compare<IClubDTO>(clubTest, club));
 
-            Assert.AreEqual(1, testItems.DeletedClubs.Count);
-             clubTest = testItems.DeletedClubs[0];
-            Assert.IsTrue(CompareObject.Compare<IClubDTO>(clubTest, dclub));
+
+
         }
-
     }
 }

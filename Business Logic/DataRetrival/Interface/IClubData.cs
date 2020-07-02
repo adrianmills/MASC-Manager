@@ -5,17 +5,16 @@ using Business_Logic.View_Model.Interface;
 using Masc_Model.Model.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Business_Logic.DataRetrival.Interface
 {
-    public interface IClubData:
-                        IDataOperationFindAndDelete<IClubViewModel>
-                      , IDataOperationAddAndUpdate<IClubViewModel>
-                      , IDatabaseOperationDetail<IClubViewModel>  
+    public interface IClubData: IDataOperationAddAndUpdate<IClubViewModel>,
+                                IDatabaseOperationDetail<IClubViewModel>
+                                
     {
         IEnumerable<IClubViewModel> Clubs { get;  }
-        bool ProccessClubs(IClubDataItems dataItems);
 
     }
 

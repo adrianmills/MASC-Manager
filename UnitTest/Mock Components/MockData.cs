@@ -1,22 +1,24 @@
-﻿using Business_Logic.DataRetrival.Interface;
+﻿using AutoMapper;
 using Business_Logic.DTO;
 using Business_Logic.DTO.Interface;
 using Business_Logic.View_Model.Interface;
 using Masc_Model.Model;
 using Masc_Model.Model.Interface;
-using Microsoft.VisualBasic;
-using NSubstitute;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
 using System.Linq;
-using System.Text;
 
 namespace UnitTest.Mock_Components
 {
     public class MockData
     {
 
+        IMapper _mapper;
+
+        public MockData(IMapper mapper)
+        {
+            _mapper = mapper;
+            }
 
         internal List<IUser> Users
         {
@@ -26,12 +28,14 @@ namespace UnitTest.Mock_Components
 
                 users.Add(new User { ID = 1, UserName = "Test User 1", Manager = true }) ;
                 users.Add(new User { ID = 2, UserName = "Test User 2", Manager=false });
+                users.Add(new User { ID = 3, UserName = "Test User 3", Manager = false });
 
                 return users;
             }
         }
 
-      internal List<IClub> MockClubs
+     
+      internal List<IClub> Clubs
         {
             get
             {
@@ -44,22 +48,27 @@ namespace UnitTest.Mock_Components
             }
         }
 
-       internal List<IStudent> MockStudents
+       internal List<IStudent> Students
         {
             get
             {
                 var students = new List<IStudent>();
 
                 students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(1973, 8, 3),Forename="Marty",Surname="Mcfly",ContactPhoneNumber="Test1" });
-                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2004, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2" });
-                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2004, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2" });
+                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2012, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2" });
+                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(1958, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2" });
+                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2004, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2",Deleted=true });
+                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1973, 8, 3), Forename = "Marty", Surname = "Mcfly", ContactPhoneNumber = "Test1" });
+                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1956, 11, 29), Forename = "Jack", Surname = "Sparrow", ContactPhoneNumber = "Test2" });
+                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1980, 11, 29), Forename = "William", Surname = "Turner", ContactPhoneNumber = "Test2" });
+                students.Add(new Student { ClubID = 3, DateofBirth = new DateTime(2012, 06, 30), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2" });
 
 
                 return students;
             }
 
         }
-        internal List<ISyllabus> MockSyllabi
+        internal List<ISyllabus> Syllabi
         {
             get
             {
@@ -73,30 +82,32 @@ namespace UnitTest.Mock_Components
                 return syllabi;
             }
         }
-        internal List<IClubViewModel> MockClubsViewData
+        internal List<IClubViewModel> ClubsViewData
         {
             get
             {
                 var clubs = new List<IClubViewModel>();
 
+                foreach(var club in Clubs.Where(c=>!c.Deleted))
+                {
+                    var clubVM = _mapper.Map<IClub, IClubViewModel>(club);
+                    clubs.Add(clubVM);
+                }
                 return clubs;
             }
         }
 
-        internal List<ISyllabusDTO> MOCKSyllabusDTOs
+        internal List<IStudentViewModel> StudentsViewData
         {
             get
             {
-                var syallbi = new List<ISyllabusDTO>();
-
-
-                foreach(var s in MockSyllabi.Where(s=>!s.Deleted))
+                var students = new List<IStudentViewModel>();
+                foreach(var student in Students.Where(s=>!s.Deleted))
                 {
-                    syallbi.Add(new SyllabusDTO { ID = s.ID, SyllabusName = s.Name });
+                    var studentVM = _mapper.Map<IStudent, IStudentViewModel>(student);
+                    students.Add(studentVM);
                 }
-
-
-                return syallbi;
+                return students;
 
 
             }

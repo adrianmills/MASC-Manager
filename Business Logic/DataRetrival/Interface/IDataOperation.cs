@@ -13,13 +13,9 @@ namespace Business_Logic.DataRetrival.Interface
 
        
 
-        T Find(long id, bool isEdit);
+        T Find(long id);
 
-        T Find(Expression<Func<T, bool>> filter, bool isEdit);
 
-        void Delete(long id);
-
-        void Delete(T record);
 
     }
 }

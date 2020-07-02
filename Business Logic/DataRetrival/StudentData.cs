@@ -26,7 +26,7 @@ namespace Business_Logic.DataRetrival
 
         public IEnumerable<IStudentViewModel> Students => throw new NotImplementedException();
 
-        public bool Add(IStudentViewModel record)
+        public void Add(IStudentViewModel record)
         {
             throw new NotImplementedException();
         }
@@ -36,22 +36,7 @@ namespace Business_Logic.DataRetrival
             throw new NotImplementedException();
         }
 
-        public void Delete(IStudentViewModel record)
-        {
-            throw new NotImplementedException();
-        }
-
         public IStudentViewModel Detail(long ID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStudentViewModel Find(long id, bool isEdit)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStudentViewModel Find(Expression<Func<IStudentViewModel, bool>> filter, bool isEdit)
         {
             throw new NotImplementedException();
         }
@@ -61,7 +46,7 @@ namespace Business_Logic.DataRetrival
             throw new NotImplementedException();
         }
 
-        public bool Update(IStudentViewModel record)
+        public void Update(IStudentViewModel record)
         {
             throw new NotImplementedException();
         }

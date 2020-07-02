@@ -10,6 +10,7 @@ using Business_Logic.Session;
 using Business_Logic.DTO;
 using Business_Logic.DataRetrival;
 using Business_Logic.DataRetrival.Data_Items;
+using Business_Logic.View_Model;
 
 namespace MASC_Web.Controllers
 {
@@ -24,74 +25,79 @@ namespace MASC_Web.Controllers
         }
 
         // GET: ClubController
-        public ActionResult Index()
+        public IActionResult Index()
         {
-            HttpContext.Session.Set("clubs", _clubData.Clubs);
-            HttpContext.Session.Set("deletedclubs", new List<IClubDTO>());
             var clubs = _clubData.Clubs;
             return PartialView("_list", clubs);
         }
 
 
-        public void AddClub(string clubname)
+        // GET: SyallabusController/Details/5
+        public IActionResult  Details(long id)
         {
+            var club = _clubData.Detail(id);
+            return PartialView("_detail", club);
+        }
 
-            if (!string.IsNullOrEmpty(clubname))
+        // GET: SyallabusController/Create
+        public IActionResult Create()
+        {
+            return PartialView("_create");
+        }
+
+        // POST: SyallabusController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create([FromForm] ClubViewModel clubToCreate)
+        {
+            try
             {
-                var clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
-
-                var club = new ClubDTO { ClubName = clubname };
-
-                clubs.Add(club);
-
-                HttpContext.Session.Set("clubs", clubs);
+                if(ModelState.IsValid)
+                {
+                    _clubData.Add(clubToCreate);
+                  return  RedirectToAction("Index");
+                }
+                else
+                {
+                    return PartialView("_create",clubToCreate);
+                }
+            }
+            catch
+            {
+                return PartialView("_create",clubToCreate);
             }
         }
 
-        public void UpdateClub(long id, string clubname)
+        // GET: SyallabusController/Edit/5
+        public IActionResult Edit(long id)
         {
-
-                if (!string.IsNullOrEmpty(clubname))
-                {
-                    var clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
-
-                    var club = clubs.Where(c => c.ClubID == id).FirstOrDefault();
-
-                if(club==null)
-                {
-                    throw new NullReferenceException(string.Format("The club with ID {0} could not be found",id));
-                }
-                    club.ClubName = clubname;
-
-                    HttpContext.Session.Set("clubs", clubs);
-                }
- 
+            var club = _clubData.Detail(id);
+            return PartialView("_edit", club);
         }
 
-        public void DeleteClub(long id)
+        // POST: SyallabusController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(long id, [FromForm] ClubViewModel clubToCreate)
         {
-            var clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
-            var deletedclubs = HttpContext.Session.Get<List<ClubDTO>>("deletedclubs");
-
-            var club = clubs.Where(c => c.ID == id).FirstOrDefault();
-            if (club == null)
+            try
             {
-                throw new NullReferenceException(string.Format("The club with ID {0} could not be found", id));
+                return RedirectToAction(nameof(Index));
             }
-            clubs.Remove(club);
-            deletedclubs.Add(club);
-            HttpContext.Session.Set("clubs", clubs);
-            HttpContext.Session.Set("deletedclubs", deletedclubs);
+            catch
+            {
+                return View();
+            }
         }
 
-        public void SaveChanges()
-        {
-            var dataItems = new ClubDataItems();
+        // GET: SyallabusController/Delete/5
+        public IActionResult Delete(long id)
+        { 
 
-            dataItems.Clubs = HttpContext.Session.Get<List<ClubDTO>>("clubs");
-            dataItems.DeletedClubs = HttpContext.Session.Get<List<ClubDTO>>("deletedclubs");
-
-            _clubData.ProccessClubs(dataItems);
+            return View();
         }
+
+    
+
     }
 }
