@@ -1,29 +1,13 @@
-﻿using AutoMapper;
-using Business_Logic.DataRetrival;
-using Business_Logic.DataRetrival.Data_Items;
-using Business_Logic.DataRetrival.Data_Items.Interface;
-using Business_Logic.DataRetrival.Interface;
-using Business_Logic.DTO;
-using Business_Logic.DTO.Interface;
-using Business_Logic.Session;
+﻿using Business_Logic.DataRetrival.Interface;
 using Business_Logic.View_Model;
 using Business_Logic.View_Model.Interface;
-using Masc_Model.Model;
-using Masc_Model.Model.Interface;
 using MASC_Web.Controllers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
-using NSubstitute.Core;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Security.Policy;
-using UnitTest.Mock_Components;
 
 namespace UnitTest.Unit_Tests.Controllers
 {
@@ -109,7 +93,7 @@ namespace UnitTest.Unit_Tests.Controllers
         }
 
         [Test]
-        public void Create_Post_AllDetails()
+        public void Create_Post_Success_RedirectToIndex()
         {
             IClubViewModel clubReturned = null;
             clubData.When(x => x.Add(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
@@ -134,12 +118,13 @@ namespace UnitTest.Unit_Tests.Controllers
         [Test]
         public void ModeValidation_MissingClubName()
         {
-            var result = new List<ValidationResult>();
+           
             var club = new ClubViewModel();
             club.ClubName = string.Empty;
             club.ManagerID = 1;
-
-            var isValid = Validator.TryValidateObject(club, new System.ComponentModel.DataAnnotations.ValidationContext(club), result);
+            bool isValid;
+            
+          var result=  ValidateViewModel(club, out isValid);
 
             Assert.IsFalse(isValid);
             Assert.AreEqual(1, result.Count);
@@ -151,13 +136,14 @@ namespace UnitTest.Unit_Tests.Controllers
         [Test]
         public void ModeValidation_MissingManager()
         {
-            var result = new List<ValidationResult>();
+           
             var club = new ClubViewModel();
             club.ClubName = "Test ";
-           
 
 
-            var isValid = Validator.TryValidateObject(club, new System.ComponentModel.DataAnnotations.ValidationContext(club), result);
+
+            bool isValid;
+                var result = ValidateViewModel(club,out isValid);
 
             Assert.IsFalse(isValid);
             Assert.AreEqual(1, result.Count);
@@ -167,30 +153,11 @@ namespace UnitTest.Unit_Tests.Controllers
         }
 
         [Test]
-        public void Edit_Post_ControllerReturnstoView()
-        {
-            IClubViewModel clubReturned = null;
-            clubData.When(x => x.Add(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
-            var clubController = new ClubController(clubData);
-            var club = new ClubViewModel();
-        
-
-            clubController.ModelState.AddModelError("ClubName", "ClubName is required field");
-
-            var result = clubController.Create(club) as PartialViewResult;
-
-
-            Assert.IsNull(clubReturned);
-            Assert.AreEqual(1, result.ViewData.ModelState.ErrorCount);
-            Assert.AreEqual("_create", result.ViewName);
-        }
-
-        [Test]
         public void Edit_Get()
         {
 
             var clubController = new ClubController(clubData);
-            var result = clubController.Create() as PartialViewResult;
+            var result = clubController.Edit(1) as PartialViewResult;
 
             Assert.AreEqual("_edit", result.ViewName);
             Assert.IsNotNull(result.ViewData.Model);
@@ -198,22 +165,23 @@ namespace UnitTest.Unit_Tests.Controllers
         }
 
         [Test]
-        public void Edit_Post_AllDetails()
+        public void Edit_Post_Success_RedirectToAction()
         {
             IClubViewModel clubReturned = null;
-            clubData.When(x => x.Add(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
+            clubData.When(x => x.Update(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
             var clubController = new ClubController(clubData);
 
             var club = new ClubViewModel();
+            club.ClubID = 1;
             club.ManagerID = 1;
-            club.ClubName = "Add Test Club";
+            club.ClubName = "Update Test Club";
 
-            var result = clubController.Create(club) as RedirectToActionResult;
+            var result = clubController.Edit(1,club) as RedirectToActionResult;
 
 
             Assert.IsNotNull(clubReturned);
-            Assert.AreEqual(0, clubReturned.ClubID);
-            Assert.AreEqual("Add Test Club", clubReturned.ClubName);
+            Assert.AreEqual(1, clubReturned.ClubID);
+            Assert.AreEqual("Update Test Club", clubReturned.ClubName);
             Assert.AreEqual(1, club.ManagerID);
             Assert.AreEqual("Index", result.ActionName);
 
@@ -224,25 +192,34 @@ namespace UnitTest.Unit_Tests.Controllers
         public void Edit_Post_ModelValidation()
         {
             IClubViewModel clubReturned = null;
-            clubData.When(x => x.Add(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
+            clubData.When(x => x.Update(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
             var clubController = new ClubController(clubData);
 
             var club = new ClubViewModel();
             club.ManagerID = 1;
-            clubController.ModelState.AddModelError("ClubName", "ClubName is required field");
+            clubController.ModelState.AddModelError("ClubName", "Club Name is required field");
 
-            var result = clubController.Create(club) as PartialViewResult;
+            var result = clubController.Edit(1,club) as PartialViewResult;
 
 
             Assert.IsNull(clubReturned);
             Assert.AreEqual(1, result.ViewData.ModelState.ErrorCount);
-            Assert.AreEqual("_create", result.ViewName);
+            Assert.AreEqual("_edit", result.ViewName);
+            Assert.IsNotNull(result.Model);
+        }
 
 
+        [Test]
+        public void DeleteClub()
+        {
+            long idReturned =0;
+            clubData.When(x => x.Delete(Arg.Any<long>())).Do(x => idReturned = x.Arg<long>());
+            var clubController = new ClubController(clubData);
 
+           var result= clubController.Delete(1) as RedirectToActionResult;
 
-
-
+            Assert.AreEqual(1, idReturned);
+            Assert.AreEqual("Index", result.ActionName);
         }
     }
 }

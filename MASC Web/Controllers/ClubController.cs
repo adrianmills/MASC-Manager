@@ -78,23 +78,31 @@ namespace MASC_Web.Controllers
         // POST: SyallabusController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(long id, [FromForm] ClubViewModel clubToCreate)
+        public IActionResult Edit(long id, [FromForm] ClubViewModel updatedClub)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _clubData.Update(updatedClub);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return PartialView("_edit", updatedClub);
+                }
             }
             catch
             {
-                return View();
+                return PartialView("_edit", updatedClub);
             }
         }
 
         // GET: SyallabusController/Delete/5
         public IActionResult Delete(long id)
-        { 
-
-            return View();
+        {
+            _clubData.Delete(id);
+            return RedirectToAction("Index");
         }
 
     
