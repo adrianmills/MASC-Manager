@@ -9,6 +9,8 @@ namespace Masc_Model.Model.Interface
  string Name { get; set; }
 
  long SyllabusID { get; set; }
+
+        Syllabus Syllabus { get; set; }
 ICollection<GradingHistory> GradingHistories { get; set; }
     }
 }

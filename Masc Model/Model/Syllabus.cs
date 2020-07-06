@@ -12,5 +12,6 @@ namespace Masc_Model.Model
         [StringLength(30)]
         public string Name { get;set; }
         public ICollection<Student> Students { get;set; }
+        public ICollection<Grade> Grades { get; set; }
     }
 }

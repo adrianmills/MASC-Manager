@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Business_Logic.DataRetrival.Interface;
-using Business_Logic.DTO.Interface;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Business_Logic.Session;
-using Business_Logic.DTO;
-using Business_Logic.DataRetrival;
-using Business_Logic.DataRetrival.Data_Items;
+﻿using Business_Logic.DataRetrival.Interface;
 using Business_Logic.View_Model;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MASC_Web.Controllers
 {

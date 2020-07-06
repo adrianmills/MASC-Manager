@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using Business_Logic.DataRetrival.Data_Items.Interface;
 using Business_Logic.DataRetrival.Interface;
+using Business_Logic.View_Model;
 using Business_Logic.View_Model.Interface;
 using Masc_Model.DAL;
 using Masc_Model.Model;
 using Masc_Model.Model.Interface;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,27 +24,24 @@ namespace Business_Logic.DataRetrival
             get
             {
                 var clubs = new List<IClubViewModel>();
-                IEnumerable<IClub> rawClubs;
+               
                 if (_user.Manager)
                 {
-                    rawClubs = from c in _context.Clubs
+                    clubs.AddRange( from c in _context.Clubs
                                .Include(m => m.Manager)
                                where !c.Deleted
-                               select c;
+                               select _mapper.Map<IClub, IClubViewModel>(c));
                 }
                 else
                 {
-                    rawClubs = from c in _context.Clubs
-                               .Include(m => m.Manager)
-                               where !c.Deleted && c.ManagerID == _user.ID
-                               select c;
+
+                    clubs.AddRange(from c in _context.Clubs
+                             .Include(m => m.Manager)
+                                   where !c.Deleted && c.ManagerID == _user.ID
+                                   select _mapper.Map<IClub, IClubViewModel>(c));
                 }
 
-                foreach (var rawClub in rawClubs)
-                {
-                    var club = _mapper.Map<IClub, IClubViewModel>(rawClub);
-                    clubs.Add(club);
-                }
+              
                 return clubs;
 
 
@@ -62,7 +58,7 @@ namespace Business_Logic.DataRetrival
 
         public void Delete(long id)
         {
-            var club = RetriveData(id, true);
+            var club = RetriveClub(id, true);
 
             club.Deleted = true;
 
@@ -75,7 +71,7 @@ namespace Business_Logic.DataRetrival
 
         public IClubViewModel Detail(long ID)
         {
-            var rawData = RetriveData(ID);
+            var rawData = RetriveClub(ID);
 
             var club = _mapper.Map<IClub, IClubViewModel>(rawData);
 
@@ -93,46 +89,36 @@ namespace Business_Logic.DataRetrival
         }
 
 
-        public bool ProccessClubs(IClubDataItems dataItems)
+        IClub RetriveClub(long id, bool forEdit = false)
         {
-            throw new NotImplementedException();
-        }
+            var query = from club in _context.Clubs
+                          .Include(c => c.Manager)
+                          .Include(c => c.Students)
+                        where club.ID == id
+                        select club;
 
-        IClub RetriveData(long id, bool isEdit = false)
-        {
-            IClub clubData;
-            if (isEdit)
+            if(!forEdit)
             {
-                clubData = (from club in _context.Clubs
-                           .Include(c => c.Manager)
-                           .Include(c => c.Students)
-                            where club.ID == id
-                            select club
-                           ).FirstOrDefault();
-            }
-            else
-            {
-                clubData = (from club in _context.Clubs
-                           .Include(c => c.Manager)
-                           .Include(c => c.Students)
-                           .AsNoTracking()
-                            where club.ID == id
-                            select club
-                           ).FirstOrDefault();
+                query = query.AsNoTracking();
             }
 
-            return clubData;
+
+            return query.FirstOrDefault();
+                           
         }
 
         public void Update(IClubViewModel record)
         {
-            var clubToUpdate = RetriveData(record.ClubID, true);
+            var clubToUpdate = RetriveClub(record.ClubID, true);
 
             _mapper.Map(record, clubToUpdate);
 
-            AddDetails(clubToUpdate);
-            _context.Clubs.Update((Club)clubToUpdate);
-            _context.SaveChanges();
+            if (_context.ChangeTracker.HasChanges())
+            {
+                AddDetails(clubToUpdate);
+                _context.Clubs.Update((Club)clubToUpdate);
+                _context.SaveChanges();
+            }
         }
     }
 

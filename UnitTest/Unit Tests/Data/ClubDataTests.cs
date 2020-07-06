@@ -1,17 +1,9 @@
-﻿using AutoMapper;
-using Business_Logic.DataRetrival;
-using Business_Logic.DataRetrival.Data_Items;
-using Business_Logic.DTO;
+﻿using Business_Logic.DataRetrival;
 using Business_Logic.View_Model;
 using Masc_Model.DAL;
 using Masc_Model.Model;
-using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using UnitTest.Mock_Components;
 
 namespace UnitTest.Unit_Tests.Data
 {
@@ -38,7 +30,7 @@ namespace UnitTest.Unit_Tests.Data
         }
 
         [Test]
-        public void Add1Club()
+        public void AddClub()
         {
 
 

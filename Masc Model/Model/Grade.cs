@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Masc_Model.Model
@@ -10,10 +11,12 @@ namespace Masc_Model.Model
     {
         [Required]
         [StringLength(20)]
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Name { get;set;}
 
         [Required]
-        public long SyllabusID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public ICollection<GradingHistory> GradingHistories { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public long SyllabusID { get;set;}
+        public ICollection<GradingHistory> GradingHistories { get;set;}
+        [ForeignKey("SyllabusID")]
+        public Syllabus Syllabus { get;set;}
     }
 }

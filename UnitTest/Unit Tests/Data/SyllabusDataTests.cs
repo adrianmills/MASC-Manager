@@ -1,5 +1,6 @@
 ﻿using Business_Logic.DataRetrival;
-using Business_Logic.DTO;
+using Business_Logic.View_Model;
+using Business_Logic.View_Model.Interface;
 using Masc_Model.DAL;
 using Masc_Model.Model;
 using NUnit.Framework;
@@ -11,51 +12,39 @@ namespace UnitTest.Unit_Tests.Data
     {
         void seed(MASCContext context)
         {
-            foreach (var c in data.MockSyllabi)
+            foreach (var s in data.Syllabi)
             {
-                context.Syllabi.Add((Syllabus) c);
+                context.Syllabi.Add((Syllabus) s);
+            }
+
+            foreach(var g in data.Grades)
+            {
+                context.Grades.Add((Grade) g);
+            }
+
+            foreach(var s in data.Students)
+            {
+                context.Students.Add((Student)s); 
             }
             context.SaveChanges();
         }
 
         [Test]
-        [Ignore("Still in development")]
-        public void Add1Syllaus()
+        public void AddSyallabus()
         {
             using (var context = new MASCContext(ContextOptions))
             {
                 seed(context);
-                var syllabusData = new SyllabusData(context, user);
+                var syllabusData = new SyllabusData(context, mapper, userManager);
 
-                var dataitems = new SyllabusDataItems();
+                var syllabus = new SyllabusViewModel { SyllabusName = "Test 1" };
 
-                dataitems.Syllabi.Add(new SyllabusDTO { SyllabusName = "Test 1" });
+                syllabusData.Add(syllabus);
 
-                syllabusData.ProccessSyllabi(dataitems);
+                var syallabi = from s in context.Syllabi
+                            select s;
 
-                Assert.AreEqual(3, syllabusData.Syllabi.Count());
-
-
-            }
-        }
-
-        [Test]
-        [Ignore("Still in development")]
-        public void Add2Syllaus()
-        {
-            using (var context = new MASCContext(ContextOptions))
-            {
-                seed(context);
-                var syllabusData = new SyllabusData(context, user);
-
-                var dataitems = new SyllabusDataItems();
-
-                dataitems.Syllabi.Add(new SyllabusDTO { SyllabusName = "Test 1" });
-                dataitems.Syllabi.Add(new SyllabusDTO { SyllabusName = "Test 4" });
-
-                syllabusData.ProccessSyllabi(dataitems);
-
-                Assert.AreEqual(4, syllabusData.Syllabi.Count());
+                Assert.AreEqual(4, syallabi.Count());
 
 
             }
@@ -68,31 +57,29 @@ namespace UnitTest.Unit_Tests.Data
             {
 
                 seed(context);
-                var syllabusData = new SyllabusData(context, user);
+                var syllabusData = new SyllabusData(context, mapper, userManager);
                 Assert.AreEqual(2, syllabusData.Syllabi.Count());
             }
 
         }
 
         [Test]
-        [Ignore("Still in development")]
-        public void DeleteSyllabus()
+
+        public void DeleteSyallabus()
         {
             using (var context = new MASCContext(ContextOptions))
             {
 
                 seed(context);
-                var syllabusData = new SyllabusData(context, user);
-                var SyllabusDataItems = new SyllabusDataItems();
-                SyllabusDataItems.DeletedSyllabi.Add(new SyllabusDTO { ID = 1, SyllabusName = "Syllabus Test 1" });
+                var syllabusData = new SyllabusData(context, mapper, userManager);
 
-                syllabusData.ProccessSyllabi(SyllabusDataItems);
+                syllabusData.Delete(1);
 
-                var deletedSyllabuss = from c in context.Syllabi
-                                       where c.Deleted
-                                   select c;
+                var deletedSyallabi = from s in context.Syllabi
+                                   where s.Deleted
+                                   select s;
 
-                Assert.AreEqual(2, deletedSyllabuss.Count());
+                Assert.AreEqual(2, deletedSyallabi.Count());
 
             }
 
@@ -100,65 +87,68 @@ namespace UnitTest.Unit_Tests.Data
         }
 
         [Test]
-        [Ignore("Still in development")]
-        public void ChangeSyllabusName()
+
+        public void ChangeSyallabusName()
         {
             using (var context = new MASCContext(ContextOptions))
             {
 
                 seed(context);
-                var syllabusData = new SyllabusData(context, user);
-                var SyllabusDataItems = new SyllabusDataItems();
+                var syllabusData = new SyllabusData(context, mapper, userManager);
 
-                SyllabusDataItems.Syllabi.Add(new SyllabusDTO { ID = 2, SyllabusName = "Name Change 2" });
+                var syllabusViewModel = data.SyllabiViewData.Where(s => s.SyllabusID == 2).FirstOrDefault();
+                syllabusViewModel.SyllabusName="changed";
 
-                syllabusData.ProccessSyllabi(SyllabusDataItems);
+                syllabusData.Update(syllabusViewModel);
 
-                var Syllabus = (from c in context.Syllabi
-                                where c.ID == 2
+                var syllabus = (from c in context.Syllabi
+                            where c.ID == 2
                             select c).FirstOrDefault();
 
-                Assert.AreEqual("Name Change 2", Syllabus.Name);
+                Assert.AreEqual("changed", syllabus.Name);
+                Assert.IsNotNull(syllabus.ModifiedBy);
+                Assert.IsNotNull(syllabus.ModifiedOn);
             }
         }
 
         [Test]
-        [Ignore("Still in development")]
-        public void MultipleOperations()
+        public void UpdateNoChange()
         {
             using (var context = new MASCContext(ContextOptions))
             {
 
                 seed(context);
-                var syllabusData = new SyllabusData(context, user);
-                var SyllabusDataItems = new SyllabusDataItems();
+                var syllabusData = new SyllabusData(context, mapper, userManager);
 
-                SyllabusDataItems.Syllabi.Add(new SyllabusDTO { ID = 2, SyllabusName = "Name Change 2" });
-                SyllabusDataItems.Syllabi.Add(new SyllabusDTO { SyllabusName = "Syllabus Test Multiple Operations 1" });
-                SyllabusDataItems.Syllabi.Add(new SyllabusDTO { SyllabusName = "Syllabus Test Multiple Operations 2" });
-                SyllabusDataItems.Syllabi.Add(new SyllabusDTO { SyllabusName = "Syllabus Test Multiple Operations 3" });
-                SyllabusDataItems.DeletedSyllabi.Add(new SyllabusDTO { ID = 1, SyllabusName = "Syllabus Test 1" });
+                var syllabusViewModel = data.SyllabiViewData.Where(s=>s.SyllabusID==2).FirstOrDefault();
 
-                syllabusData.ProccessSyllabi(SyllabusDataItems);
+                syllabusData.Update(syllabusViewModel);
 
-                var Syllabus = (from c in context.Syllabi
+                var syllabus = (from c in context.Syllabi
                                 where c.ID == 2
-                            select c).FirstOrDefault();
-                var Syllabuss = from c in context.Syllabi
-                                where !c.Deleted
-                            select c;
-                var deletedSyllabuss = from c in context.Syllabi
-                                       where c.Deleted
-                                   select c;
+                                select c).FirstOrDefault();
 
-                Assert.AreEqual("Name Change 2", Syllabus.Name);
-
-                Assert.AreEqual(4, Syllabuss.Count());
-
-                Assert.AreEqual(2, deletedSyllabuss.Count());
-
+                Assert.AreEqual("Syllabus Test 2", syllabus.Name);
+                Assert.IsNull(syllabus.ModifiedBy);
+                Assert.IsNull(syllabus.ModifiedOn);
             }
         }
 
+        [Test]
+        public void SyllabusDetail()
+        {
+            using (var context = new MASCContext(ContextOptions))
+            {
+
+                seed(context);
+                var syllabusData = new SyllabusData(context, mapper, userManager);
+
+                var syllabus = syllabusData.Detail(1);
+
+                Assert.AreEqual("Syllabus Test 1", syllabus.SyllabusName);
+                Assert.AreEqual(2, syllabus.Grades.Count);
+                Assert.AreEqual(4, syllabus.Students.Count);
+            }
+        }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Business_Logic.DTO;
-using Business_Logic.DTO.Interface;
 using Business_Logic.View_Model.Interface;
 using Masc_Model.Model;
 using Masc_Model.Model.Interface;
@@ -54,19 +52,36 @@ namespace UnitTest.Mock_Components
             {
                 var students = new List<IStudent>();
 
-                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(1973, 8, 3),Forename="Marty",Surname="Mcfly",ContactPhoneNumber="Test1" });
-                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2012, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2" });
-                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(1958, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2" });
-                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2004, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2",Deleted=true });
-                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1973, 8, 3), Forename = "Marty", Surname = "Mcfly", ContactPhoneNumber = "Test1" });
-                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1956, 11, 29), Forename = "Jack", Surname = "Sparrow", ContactPhoneNumber = "Test2" });
-                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1980, 11, 29), Forename = "William", Surname = "Turner", ContactPhoneNumber = "Test2" });
-                students.Add(new Student { ClubID = 3, DateofBirth = new DateTime(2012, 06, 30), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2" });
+                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(1973, 8, 3),Forename="Marty",Surname="Mcfly",ContactPhoneNumber="Test1" ,SyllabusID=1});
+                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2012, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", SyllabusID = 2 });
+                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(1958, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", SyllabusID = 1 });
+                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2004, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", SyllabusID = 2, Deleted=true });
+                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1973, 8, 3), Forename = "Marty", Surname = "Mcfly", ContactPhoneNumber = "Test1", SyllabusID = 1 });
+                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1956, 11, 29), Forename = "Jack", Surname = "Sparrow", ContactPhoneNumber = "Test2", SyllabusID = 2 });
+                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1980, 11, 29), Forename = "William", Surname = "Turner", ContactPhoneNumber = "Test2", SyllabusID = 2 });
+                students.Add(new Student { ClubID = 3, DateofBirth = new DateTime(2012, 06, 30), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", SyllabusID = 1  });
 
 
                 return students;
             }
 
+        }
+
+        internal List<IGrade> Grades
+        {
+            get
+            {
+                var grades = new List<IGrade>();
+
+                grades.Add(new Grade { ID = 1, Name = "White", SyllabusID = 1 });
+                grades.Add(new Grade { ID = 2, Name = "Blue", SyllabusID = 1 });
+                grades.Add(new Grade { ID = 3, Name = "Purple", SyllabusID = 2 });
+                grades.Add(new Grade { ID = 4, Name = "Orange", SyllabusID = 2 });
+                grades.Add(new Grade { ID = 5, Name = "Brown", SyllabusID = 3 });
+                grades.Add(new Grade { ID = 6, Name = "Brown Gold Tag", SyllabusID = 2 });
+
+                return grades;
+            }
         }
         internal List<ISyllabus> Syllabi
         {
@@ -113,6 +128,19 @@ namespace UnitTest.Mock_Components
             }
         }
 
+        internal List<ISyllabusViewModel> SyllabiViewData
+        {
+            get
+            {
+                var syllabi = new List<ISyllabusViewModel>();
+                foreach (var syllabus in Syllabi.Where(s => !s.Deleted))
+                {
+                    var viewModel = _mapper.Map<ISyllabus, ISyllabusViewModel>(syllabus);
+                    syllabi.Add(viewModel);
+                }
+                return syllabi;
+            }
+        }
       
 
     }

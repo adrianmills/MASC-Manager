@@ -8,7 +8,6 @@
   <ItemGroup>
     <Compile Remove="DataRetrival\Interface\IDataOperation.cs" />
     <Compile Remove="DataRetrival\SyallbusDataItems.cs" />
-    <Compile Remove="DataRetrival\SyllabusData.cs" />
   </ItemGroup>
 
   <ItemGroup>

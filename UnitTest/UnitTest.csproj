@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Compile Remove="Unit Tests\Data\reddundent ClubUnitTests.cs" />
-    <Compile Remove="Unit Tests\Data\SyllabusDataTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

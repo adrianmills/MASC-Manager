@@ -10,5 +10,7 @@ namespace Masc_Model.Model.Interface
         string Name { get; set; }
 
         ICollection<Student> Students { get; set; }
+
+        ICollection<Grade> Grades { get; set; }
     }
 }
