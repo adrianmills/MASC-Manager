@@ -2,86 +2,96 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Business_Logic.DataRetrival.Interface;
+using Business_Logic.View_Model;
+using MASC_Web.Controllers.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MASC_Web.Controllers
 {
-    public class SyallabusController : Controller
+    public class SyallabusController : Controller, IMascController<SyllabusViewModel>
     {
-        // GET: SyallabusController
-        public ActionResult Index()
+        ISyllabusData _data;
+        public SyallabusController(ISyllabusData syllabusData)
         {
-            return View();
+            _data = syllabusData;
         }
 
-        // GET: SyallabusController/Details/5
-        public ActionResult Details(int id)
+        public IActionResult Create()
         {
-            return View();
+            return PartialView("_create");
         }
 
-        // GET: SyallabusController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: SyallabusController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Create([FromForm] SyllabusViewModel recordToCreate)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if(ModelState.IsValid)
+                {
+                    _data.Add(recordToCreate);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return PartialView("_create", recordToCreate);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+
+                ModelState.AddModelError("","Sorry an error has occured. It has been logged and the relevent people informed");
+                return PartialView("_create", recordToCreate);
             }
         }
 
-        // GET: SyallabusController/Edit/5
-        public ActionResult Edit(int id)
+        public IActionResult Delete(long id)
         {
-            return View();
+            _data.Delete(id);
+
+            return RedirectToAction("Index");
         }
 
-        // POST: SyallabusController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public IActionResult Details(long id)
+        {
+            var syllabus = _data.Detail(id);
+            return PartialView("_detail", syllabus);
+
+        }
+
+        public IActionResult Edit(long id)
+        {
+            var syllabus = _data.Detail(id);
+            return PartialView("_edit", syllabus);
+        }
+
+        public IActionResult Edit(long id, [FromForm] SyllabusViewModel recordToUpdate)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _data.Update(recordToUpdate);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return PartialView("_edit", recordToUpdate);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+
+                ModelState.AddModelError("", "Sorry an error has occured. It has been logged and the relevent people informed");
+                return PartialView("_edit", recordToUpdate);
             }
         }
 
-        // GET: SyallabusController/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Index()
         {
-            return View();
-        }
+            var syllabi = _data.Syllabi;
 
-        // POST: SyallabusController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return PartialView("_list", syllabi);
         }
     }
 }

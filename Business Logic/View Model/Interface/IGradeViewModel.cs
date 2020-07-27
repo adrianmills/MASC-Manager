@@ -14,10 +14,12 @@ namespace Business_Logic.View_Model.Interface
 
         string Syllabus { get; set; }
 
-
+        long SyallbusID { get; set; }
         List<IStudentViewModel> Students
         {
             get;set;
         }
+
+        List<ISyllabusViewModel> Syllabi { get; set; }
     }
 }

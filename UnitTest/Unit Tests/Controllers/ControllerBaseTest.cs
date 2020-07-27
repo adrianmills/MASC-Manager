@@ -33,7 +33,7 @@ namespace UnitTest.Unit_Tests.Controllers
         {
             var result = new List<ValidationResult>();
 
-            isValid = Validator.TryValidateObject(entity, new ValidationContext(entity), result);
+            isValid = Validator.TryValidateObject(entity, new ValidationContext(entity), result,true);
 
             return result;
 

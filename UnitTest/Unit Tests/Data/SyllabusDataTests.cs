@@ -146,8 +146,8 @@ namespace UnitTest.Unit_Tests.Data
                 var syllabus = syllabusData.Detail(1);
 
                 Assert.AreEqual("Syllabus Test 1", syllabus.SyllabusName);
-                Assert.AreEqual(2, syllabus.Grades.Count);
-                Assert.AreEqual(4, syllabus.Students.Count);
+                Assert.AreEqual(2, syllabus.Grades.Count());
+                Assert.AreEqual(4, syllabus.Students.Count());
             }
         }
     }

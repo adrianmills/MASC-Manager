@@ -41,6 +41,11 @@ namespace Business_Logic.DataRetrival
             throw new NotImplementedException();
         }
 
+        public void PopulateList(IStudentViewModel viewModel)
+        {
+            throw new NotImplementedException();
+        }
+
         public void PopulateLists(IStudentViewModel viewModel)
         {
             throw new NotImplementedException();

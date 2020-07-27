@@ -141,6 +141,23 @@ namespace UnitTest.Mock_Components
                 return syllabi;
             }
         }
+
+        internal List<IGradeViewModel> GradesViewData
+        {
+            get
+            {
+                var grades = new List<IGradeViewModel>();
+
+                foreach(var grade in Grades.Where(g=>!g.Deleted))
+                    {
+                    grades.Add(_mapper.Map<IGrade, IGradeViewModel>(grade));
+                }
+
+
+                return grades;
+            }
+        }
+
       
 
     }

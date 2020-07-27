@@ -1,10 +1,11 @@
 ﻿using Business_Logic.DataRetrival.Interface;
 using Business_Logic.View_Model;
+using MASC_Web.Controllers.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MASC_Web.Controllers
 {
-    public class ClubController : Controller
+    public class ClubController : Controller, IMascController<ClubViewModel>
     {
         IClubData _clubData;
 
@@ -23,7 +24,7 @@ namespace MASC_Web.Controllers
 
 
         // GET: SyallabusController/Details/5
-        public IActionResult  Details(long id)
+        public IActionResult Details(long id)
         {
             var club = _clubData.Detail(id);
             return PartialView("_detail", club);
@@ -42,19 +43,19 @@ namespace MASC_Web.Controllers
         {
             try
             {
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     _clubData.Add(clubToCreate);
-                  return  RedirectToAction("Index");
+                    return RedirectToAction("Index");
                 }
                 else
                 {
-                    return PartialView("_create",clubToCreate);
+                    return PartialView("_create", clubToCreate);
                 }
             }
             catch
             {
-                return PartialView("_create",clubToCreate);
+                return PartialView("_create", clubToCreate);
             }
         }
 
@@ -95,7 +96,7 @@ namespace MASC_Web.Controllers
             return RedirectToAction("Index");
         }
 
-    
+
 
     }
 }

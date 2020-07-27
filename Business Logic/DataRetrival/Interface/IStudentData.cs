@@ -8,11 +8,11 @@ namespace Business_Logic.DataRetrival.Interface
 {
 
     public interface IStudentData : IDataOperationAddAndUpdate<IStudentViewModel>,
-                                    IDatabaseOperationDetail<IStudentViewModel>
+                                    IDatabaseOperationDetail<IStudentViewModel>,
+                                    IPopulateLists<IStudentViewModel>
     {
 
         IEnumerable<IStudentViewModel> Students { get; }
 
-        void PopulateLists(IStudentViewModel viewModel);
     }
 }

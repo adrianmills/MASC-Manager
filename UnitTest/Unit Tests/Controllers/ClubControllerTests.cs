@@ -18,7 +18,7 @@ namespace UnitTest.Unit_Tests.Controllers
         IClubData clubData;
 
         [SetUp]
-        public void Intilise()
+        public void MockClubData()
         {
 
 

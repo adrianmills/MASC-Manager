@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Business_Logic.View_Model.Interface
 {
@@ -6,10 +7,14 @@ namespace Business_Logic.View_Model.Interface
     {
 
         long SyllabusID { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        [Display(Name = "Syllabus Name")]
         string SyllabusName { get; set; }
 
-        ICollection<IStudentViewModel> Students { get; set; }
+        IEnumerable<IStudentViewModel> Students { get; set; }
 
-        ICollection<IGradeViewModel> Grades { get; set; }
+        IEnumerable<IGradeViewModel> Grades { get; set; }
     }
 }

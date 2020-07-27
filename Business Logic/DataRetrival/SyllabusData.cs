@@ -58,18 +58,21 @@ namespace Business_Logic.DataRetrival
 
             var syllabus = _mapper.Map<ISyllabus, ISyllabusViewModel>(rawData);
 
-            syllabus.Students = new List<IStudentViewModel>();
-            syllabus.Grades = new List<IGradeViewModel>();
+            var students = new List<IStudentViewModel>();
+            var grades = new List<IGradeViewModel>();
+
             foreach (var student in rawData.Students.Where(s=>!s.Deleted))
             {
-                syllabus.Students.Add(_mapper.Map<IStudent, IStudentViewModel>(student));
+                students.Add(_mapper.Map<IStudent, IStudentViewModel>(student));
             }
 
             foreach(var grade in rawData.Grades.Where(g=>!g.Deleted))
             {
-                syllabus.Grades.Add(_mapper.Map<IGrade, IGradeViewModel>(grade));
+                grades.Add(_mapper.Map<IGrade, IGradeViewModel>(grade));
             }
 
+            syllabus.Students = students;
+            syllabus.Grades = grades;
             return syllabus;
         }
 

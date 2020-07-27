@@ -11,6 +11,9 @@ namespace Business_Logic.View_Model
         public long GradeID { get;set; }
         public string GradeName { get;set; }
         public string Syllabus { get;set; }
+
+        public long SyallbusID { get; set; }
         public List<IStudentViewModel> Students { get;set; }
+        public List<ISyllabusViewModel> Syllabi { get; set; }
     }
 }
