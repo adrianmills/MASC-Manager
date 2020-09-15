@@ -116,7 +116,7 @@ namespace UnitTest.Unit_Tests.Controllers
         }
 
         [Test]
-        public void ModeValidation_MissingClubName()
+        public void Model_Validation_MissingClubName()
         {
            
             var club = new ClubViewModel();
@@ -134,7 +134,7 @@ namespace UnitTest.Unit_Tests.Controllers
         }
 
         [Test]
-        public void ModeValidation_MissingManager()
+        public void Model_Validation_MissingManager()
         {
            
             var club = new ClubViewModel();
