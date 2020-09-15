@@ -38,32 +38,15 @@ namespace UnitTest.Unit_Tests.Controllers
         [Test]
         public void Index()
         {
-            //var httpContext = Substitute.For<HttpContext>();
-            //var mockSession = new MockHttpSession();
-            //httpContext.Session = mockSession;
-            //httpContext.Request.Returns(Substitute.For<HttpRequest>());
-            //httpContext.Response.Returns(Substitute.For<HttpResponse>());
-
-
-
-            //var services = new ServiceCollection();
-            //services.AddMvc();
 
             var clubController = new ClubController(clubData);
-            //{
-            //    ControllerContext = new ControllerContext
-            //    {
-            //        HttpContext = httpContext
-            //    }
-            //};
-
-            //clubController.TempData = Substitute.For<ITempDataDictionary>();
-
+            
             var result = clubController.Index() as PartialViewResult;
 
-
             var resultdata = result.ViewData.Model as List<IClubViewModel>;
+
             Assert.AreEqual("_list", result.ViewName);
+
             Assert.AreEqual(2, resultdata.Count);
         }
 
@@ -96,6 +79,8 @@ namespace UnitTest.Unit_Tests.Controllers
         public void Create_Post_Success_RedirectToIndex()
         {
             IClubViewModel clubReturned = null;
+
+            //When the add method is called on the repository set the variable to the club returned
             clubData.When(x => x.Add(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
             var clubController = new ClubController(clubData);
 
@@ -168,6 +153,7 @@ namespace UnitTest.Unit_Tests.Controllers
         public void Edit_Post_Success_RedirectToAction()
         {
             IClubViewModel clubReturned = null;
+            //When the Update Method is called on the repository set the variable to the club returned
             clubData.When(x => x.Update(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
             var clubController = new ClubController(clubData);
 
@@ -192,7 +178,10 @@ namespace UnitTest.Unit_Tests.Controllers
         public void Edit_Post_ModelValidation()
         {
             IClubViewModel clubReturned = null;
+
+            //When the Update Method is called on the repository set the variable to the club returned
             clubData.When(x => x.Update(Arg.Any<IClubViewModel>())).Do(x => clubReturned = x.Arg<IClubViewModel>());
+
             var clubController = new ClubController(clubData);
 
             var club = new ClubViewModel();
@@ -213,7 +202,10 @@ namespace UnitTest.Unit_Tests.Controllers
         public void DeleteClub()
         {
             long idReturned =0;
+
+            //When the delete method is called on the repository with any id set the returned id 
             clubData.When(x => x.Delete(Arg.Any<long>())).Do(x => idReturned = x.Arg<long>());
+
             var clubController = new ClubController(clubData);
 
            var result= clubController.Delete(1) as RedirectToActionResult;

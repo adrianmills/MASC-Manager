@@ -30,8 +30,15 @@ namespace UnitTest.Unit_Tests.Controllers
             syllabusDetail.Grades = data.GradesViewData.Where(g => g.SyallbusID == 1).ToList();
 
             syllabusData.Detail(1).Returns(syllabusDetail);
+
+            //Trying a different method of updates compared to club tests not sure to keep this or put the following in the relevant methods to increase readability
+
+            //When the Add Method is called on the repository set the return view data to the returned syllabus
+            //do the same for the update method
             syllabusData.When(x => x.Add(Arg.Any<ISyllabusViewModel>())).Do(x => returnViewData = x.Arg<ISyllabusViewModel>());
             syllabusData.When(x => x.Update(Arg.Any<ISyllabusViewModel>())).Do(x => returnViewData = x.Arg<ISyllabusViewModel>());
+
+            //for the delete method set the returned id
             syllabusData.When(x => x.Delete(Arg.Any<long>())).Do(x => idReturned = x.Arg<long>());
 
             syllabusController = new SyallabusController(syllabusData);
