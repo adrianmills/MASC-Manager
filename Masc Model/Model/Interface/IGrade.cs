@@ -12,5 +12,7 @@ namespace Masc_Model.Model.Interface
 
         Syllabus Syllabus { get; set; }
 ICollection<GradingHistory> GradingHistories { get; set; }
+
+        ICollection<Student> Students { get; set; }
     }
 }

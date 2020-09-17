@@ -37,8 +37,8 @@ namespace Business_Logic.View_Model.Interface
         string ReferralSource { get; set; }
         DateTime? Started { get; set; }
         string Surname { get; set; }
-        string SyllabusName { get; set; }
-        long SyllabusID { get; set; }
+        string CurrentGrade { get; set; }
+        long GradeID { get; set; }
         DateTime? UpdateDoneOn { get; set; }
     }
 }

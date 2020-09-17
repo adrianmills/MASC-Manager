@@ -26,9 +26,19 @@ namespace UnitTest.Unit_Tests.Controllers
             syllabusData.Syllabi.Returns(data.SyllabiViewData);
 
             var syllabusDetail = data.SyllabiViewData.Where(s => s.SyllabusID == 1).First();
-            syllabusDetail.Students = data.StudentsViewData.Where(s => s.SyllabusID == 1).ToList();
+
+            var students = new List<IStudentViewModel>();
+            //syllabusDetail.Students = data.StudentsViewData.Where(s => s.SyllabusID == 1).ToList();
             syllabusDetail.Grades = data.GradesViewData.Where(g => g.SyallbusID == 1).ToList();
 
+            foreach(var grade in syllabusDetail.Grades)
+            {
+                students.AddRange(data.StudentsViewData.Where(s => s.GradeID == grade.GradeID));
+            }
+
+
+            syllabusDetail.Students = students;
+            
             syllabusData.Detail(1).Returns(syllabusDetail);
 
             //Trying a different method of updates compared to club tests not sure to keep this or put the following in the relevant methods to increase readability
@@ -66,7 +76,7 @@ namespace UnitTest.Unit_Tests.Controllers
 
             Assert.AreEqual("_detail", result.ViewName);
             Assert.IsNotNull(resultData);
-            Assert.AreEqual(4, resultData.Students.Count());
+            Assert.AreEqual(7, resultData.Students.Count());
             Assert.AreEqual(2, resultData.Grades.Count());
         }
 

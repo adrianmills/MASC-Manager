@@ -70,10 +70,11 @@ namespace Business_Logic.View_Model
         public string ReferralSource { get;set;}
         public DateTime? Started { get;set;}
         public string Surname { get;set;}
-        public string SyllabusName { get;set;}
-        public long SyllabusID { get;set;}
+
         public DateTime? UpdateDoneOn { get;set;}
         public long StudentID { get;set;}
         public bool Deleted { get;set;}
+        public string CurrentGrade { get; set; }
+        public long GradeID { get; set; }
     }
 }

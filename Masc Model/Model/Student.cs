@@ -45,8 +45,11 @@ namespace Masc_Model.Model
         [Required]
         [StringLength(20)]
         public string Surname {get;set; }
-        public Syllabus Syllabus {get;set; }
-        public long SyllabusID {get;set; }
+
         public DateTime? UpdateDoneOn {get;set; }
+        public long GradeID { get; set; }
+
+        [ForeignKey("GradeID")]
+        public Grade CurrentGrade { get; set; }
     }
 }

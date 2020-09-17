@@ -52,14 +52,14 @@ namespace UnitTest.Mock_Components
             {
                 var students = new List<IStudent>();
 
-                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(1973, 8, 3),Forename="Marty",Surname="Mcfly",ContactPhoneNumber="Test1" ,SyllabusID=1});
-                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2012, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", SyllabusID = 2 });
-                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(1958, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", SyllabusID = 1 });
-                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2004, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", SyllabusID = 2, Deleted=true });
-                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1973, 8, 3), Forename = "Marty", Surname = "Mcfly", ContactPhoneNumber = "Test1", SyllabusID = 1 });
-                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1956, 11, 29), Forename = "Jack", Surname = "Sparrow", ContactPhoneNumber = "Test2", SyllabusID = 2 });
-                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1980, 11, 29), Forename = "William", Surname = "Turner", ContactPhoneNumber = "Test2", SyllabusID = 2 });
-                students.Add(new Student { ClubID = 3, DateofBirth = new DateTime(2012, 06, 30), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", SyllabusID = 1  });
+                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(1973, 8, 3),Forename="Marty",Surname="Mcfly",ContactPhoneNumber="Test1" ,GradeID=1});
+                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2012, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", GradeID = 2 });
+                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(1958, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", GradeID = 1 });
+                students.Add(new Student { ClubID = 1, DateofBirth = new DateTime(2004, 11, 29), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", GradeID = 2, Deleted=true });
+                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1973, 8, 3), Forename = "Marty", Surname = "Mcfly", ContactPhoneNumber = "Test1", GradeID = 1 });
+                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1956, 11, 29), Forename = "Jack", Surname = "Sparrow", ContactPhoneNumber = "Test2", GradeID = 2 });
+                students.Add(new Student { ClubID = 2, DateofBirth = new DateTime(1980, 11, 29), Forename = "William", Surname = "Turner", ContactPhoneNumber = "Test2", GradeID = 2 });
+                students.Add(new Student { ClubID = 3, DateofBirth = new DateTime(2012, 06, 30), Forename = "George", Surname = "Mcfly", ContactPhoneNumber = "Test2", GradeID = 1  });
 
 
                 return students;

@@ -29,9 +29,9 @@ namespace Masc_Model.Model.Interface
         DateTime? Started { get; set; }
         //ICollection<StudentAward> StudentAwards { get; set; }
         string Surname { get; set; }
-        Syllabus Syllabus { get; set; }
-        long SyllabusID { get; set; }
         DateTime? UpdateDoneOn { get; set; }
+        long GradeID { get; set; }
+        Grade CurrentGrade { get; set; }
 
     }
 }

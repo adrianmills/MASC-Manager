@@ -38,22 +38,18 @@ namespace Business_Logic.AutoMapProfiles
             CreateMap<IGrade, IGradeViewModel>()
                 .ForMember(dest => dest.GradeName, d => d.MapFrom(src => src.Name))
                 .ForMember(dest => dest.GradeID, d => d.MapFrom(src => src.ID))
-                .ForMember(dest => dest.SyallbusID, d=>d.MapFrom(src => src.SyllabusID))
+                .ForMember(dest => dest.SyallbusID, d=>d.MapFrom(src => src.SyllabusID)) 
                 .ForMember(dest => dest.Syllabus, d => d.MapFrom(src => src.Syllabus.Name));
 
             CreateMap<IGradeViewModel, Grade>()
                 .ForMember(dest => dest.Name, d => d.MapFrom(src => src.GradeName))
-                .ForMember(dest => dest.ID, d => d.MapFrom(src => src.GradeID));
-
+                .ForMember(dest => dest.ID, d => d.MapFrom(src => src.GradeID))
+            .ForMember(dest => dest.SyllabusID, d => d.MapFrom(src => src.SyallbusID));
 
             CreateMap<IStudent, IStudentViewModel>()
                 .ForMember(dest => dest.StudentID, d => d.MapFrom(src => src.ID))
                 .ForMember(dest => dest.ClubName, d => d.MapFrom(src => src.Club.Name))
-                .ForMember(dest => dest.SyllabusName, d => d.MapFrom(src => src.Syllabus.Name));
-
-
-
-
+                .ForMember(dest => dest.CurrentGrade, d => d.MapFrom(src => src.CurrentGrade.Name));
 
         }
     }

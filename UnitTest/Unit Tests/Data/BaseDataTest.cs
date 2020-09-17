@@ -57,6 +57,7 @@ namespace UnitTest.Unit_Tests.Data
             {
                 return new DbContextOptionsBuilder<MASCContext>()
                     .UseInMemoryDatabase(databaseName: "MASCManager", new InMemoryDatabaseRoot())
+                    .EnableServiceProviderCaching(false)
                     .Options;
 
 

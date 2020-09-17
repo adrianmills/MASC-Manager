@@ -16,7 +16,9 @@ namespace Masc_Model.Model
         [Required]
         public long SyllabusID { get;set;}
         public ICollection<GradingHistory> GradingHistories { get;set;}
+
         [ForeignKey("SyllabusID")]
         public Syllabus Syllabus { get;set;}
+        public ICollection<Student> Students { get; set; }
     }
 }

@@ -13,12 +13,6 @@ namespace Masc_Model.DAL
         {
         }
 
-        //        public MASCContext(DbContextOptions options)
-        //: base(options)
-        //        {
-        //        }
-
-
         public virtual DbSet<Club> Clubs { get; set; }
 
         public virtual DbSet<Syllabus> Syllabi { get; set; }
@@ -32,6 +26,6 @@ namespace Masc_Model.DAL
         public virtual DbSet<Grade> Grades { get; set; }
 
         public virtual DbSet<Address> Addresses { get; set; }
-        public DbSet<User> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

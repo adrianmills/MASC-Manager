@@ -61,16 +61,22 @@ namespace Business_Logic.DataRetrival
             var students = new List<IStudentViewModel>();
             var grades = new List<IGradeViewModel>();
 
-            foreach (var student in rawData.Students.Where(s=>!s.Deleted))
+ 
+            if (rawData.Grades != null)
             {
-                students.Add(_mapper.Map<IStudent, IStudentViewModel>(student));
-            }
+                foreach (var grade in rawData.Grades.Where(g => !g.Deleted))
+                {
+                    grades.Add(_mapper.Map<IGrade, IGradeViewModel>(grade));
 
-            foreach(var grade in rawData.Grades.Where(g=>!g.Deleted))
-            {
-                grades.Add(_mapper.Map<IGrade, IGradeViewModel>(grade));
+                    if(grade.Students !=null)
+                    {
+                        foreach(var student in grade.Students.Where(s=>!s.Deleted))
+                        {
+                            students.Add(_mapper.Map<IStudent, IStudentViewModel>(student));
+                        }
+                    }
+                }
             }
-
             syllabus.Students = students;
             syllabus.Grades = grades;
             return syllabus;
@@ -93,7 +99,7 @@ namespace Business_Logic.DataRetrival
         {
             var query = from syllabus in _context.Syllabi
                            .Include(s => s.Grades)
-                           .Include(s => s.Students)
+                           .ThenInclude(g=>g.Students)
                         where syllabus.ID == id
                         select syllabus;
 

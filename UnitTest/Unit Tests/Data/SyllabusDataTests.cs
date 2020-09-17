@@ -112,7 +112,7 @@ namespace UnitTest.Unit_Tests.Data
         }
 
         [Test]
-        public void UpdateNoChange()
+          public void UpdateNoChange()
         {
             using (var context = new MASCContext(ContextOptions))
             {
@@ -147,7 +147,7 @@ namespace UnitTest.Unit_Tests.Data
 
                 Assert.AreEqual("Syllabus Test 1", syllabus.SyllabusName);
                 Assert.AreEqual(2, syllabus.Grades.Count());
-                Assert.AreEqual(4, syllabus.Students.Count());
+                Assert.AreEqual(7, syllabus.Students.Count());
             }
         }
     }
