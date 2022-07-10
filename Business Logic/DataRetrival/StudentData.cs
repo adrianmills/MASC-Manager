@@ -2,19 +2,13 @@
 using Business_Logic.DataRetrival.Interface;
 using Business_Logic.View_Model.Interface;
 using Masc_Model.DAL;
-using Masc_Model.Model;
 using Masc_Model.Model.Interface;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 
 namespace Business_Logic.DataRetrival
 {
-   public class StudentData:BaseData,IStudentData
+    public class StudentData:BaseData,IStudentData
     {
   
 

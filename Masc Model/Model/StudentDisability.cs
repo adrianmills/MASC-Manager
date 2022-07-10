@@ -9,10 +9,10 @@ namespace Masc_Model.Model
     public class StudentDisability : BaseModel, IStudentDisability
     {
         public long StudentID { get;set; }
-        public long DisabilityID { get;set; }
+        public string Disability { get;set;}
         [ForeignKey("StudentID")]
         public Student Student { get;set; }
-        [ForeignKey("DisabilityID")]
-        public Disablity Disablity { get;set; }
+    //    [ForeignKey("DisabilityID")]
+    //    public Disablity Disablity { get;set; }
     }
 }

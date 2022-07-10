@@ -9,11 +9,11 @@ namespace Masc_Model.Model.Interface
 
         long StudentID { get; set; }
 
-        long DisabilityID { get; set; }
+        string Disability { get; set; }
 
         Student Student { get; set; }
 
-        Disablity Disablity { get; set; }
+   
 
 
 
