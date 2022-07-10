@@ -17,7 +17,11 @@ namespace Business_Logic.DataRetrival
             
             
         }
+        public StudentData(MASCContext context, IMapper mapper) : base(context, mapper)
+        {
 
+
+        }
         public IEnumerable<IStudentViewModel> Students => throw new NotImplementedException();
 
         public void Add(IStudentViewModel record)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Business_Logic.View_Model;
 using Business_Logic.View_Model.Interface;
 using Masc_Model.Model;
 using Masc_Model.Model.Interface;
@@ -9,7 +10,7 @@ namespace Business_Logic.AutoMapProfiles
     {
         public MASCProfiles()
         {
-            CreateMap<IClub, IClubViewModel>()
+            CreateMap<IClub, ClubViewModel>()
                 .ForMember(dest => dest.ClubID, d => d.MapFrom(src => src.ID))
                 .ForMember(dest => dest.ClubName, d => d.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Manager, d => d.MapFrom(src => src.Manager.UserName))

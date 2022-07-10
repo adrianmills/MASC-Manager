@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Business_Logic.AutoMapProfiles;
+using Business_Logic.DataRetrival;
+using Business_Logic.DataRetrival.Interface;
 using Masc_Model.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +34,7 @@ namespace MASC_Web
             services.AddAutoMapper(typeof(MASCProfiles));
             services.AddControllersWithViews();
             services.AddDbContext<MASCContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MascContext")));
+            services.AddTransient<IClubData, ClubData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

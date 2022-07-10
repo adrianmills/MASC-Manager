@@ -21,6 +21,12 @@ namespace Business_Logic.DataRetrival
             _mapper = mapper;
             _user = user;
         }
+
+        public BaseData(MASCContext context, IMapper mapper)
+        {
+            _context=context;
+            _mapper=mapper;
+        }
         protected void AddDetails(IBase record, bool newRecord = false)
         {
 

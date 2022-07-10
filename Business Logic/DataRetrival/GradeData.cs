@@ -20,6 +20,12 @@ namespace Business_Logic.DataRetrival
 
 
         }
+
+        public GradeData(MASCContext context, IMapper mapper) : base(context, mapper)
+        {
+
+
+        }
         public IEnumerable<IGradeViewModel> Grades
         {
             get

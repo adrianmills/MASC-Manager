@@ -12,7 +12,7 @@ namespace Masc_Model.Model.Interface
         string Name { get; set; }
         
         [Required]
-        long ManagerID { get; set; }
+        long? ManagerID { get; set; }
 
 
         User Manager { get; set; }

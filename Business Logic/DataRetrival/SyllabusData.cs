@@ -20,7 +20,11 @@ namespace Business_Logic.DataRetrival
 
 
         }
+        public SyllabusData(MASCContext context, IMapper mapper) : base(context, mapper)
+        {
 
+
+        }
         public IEnumerable<ISyllabusViewModel> Syllabi
         {
             get

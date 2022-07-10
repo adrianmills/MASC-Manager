@@ -19,27 +19,23 @@ namespace Business_Logic.DataRetrival
 
         }
 
+        public ClubData(MASCContext context, IMapper mapper) : base(context, mapper)
+        {
+
+        }
         public IEnumerable<IClubViewModel> Clubs
         {
             get
             {
                 var clubs = new List<IClubViewModel>();
                
-                if (_user.Manager)
-                {
+
                     clubs.AddRange( from c in _context.Clubs
                                .Include(m => m.Manager)
                                where !c.Deleted
-                               select _mapper.Map<IClub, IClubViewModel>(c));
-                }
-                else
-                {
+                               select _mapper.Map<IClub, ClubViewModel>(c));
+  
 
-                    clubs.AddRange(from c in _context.Clubs
-                             .Include(m => m.Manager)
-                                   where !c.Deleted && c.ManagerID == _user.ID
-                                   select _mapper.Map<IClub, IClubViewModel>(c));
-                }
 
               
                 return clubs;

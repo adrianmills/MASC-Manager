@@ -15,7 +15,7 @@ namespace Masc_Model.Model
         public ICollection<Student> Students { get;set;}
 
         [Required]
-      public  long ManagerID { get; set; }
+      public  long? ManagerID { get; set; }
 
         [ForeignKey("ManagerID")]
         public virtual User Manager { get; set; }
